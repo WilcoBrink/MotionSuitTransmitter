@@ -19,57 +19,63 @@
 
 extern unsigned char received_data[42];
 
-extern  void __enable_interrupts();
-extern  void __disable_interrupts();
+extern  void __enable_interrupts(void);
+extern  void __disable_interrupts(void);
 
 /******************************************************************************\
  main
 \******************************************************************************/
 extern int main()
 { 
-	signed char test;
-	int data;
-	unsigned int key;
-	
+
+	char string[11];
+	char *pString;
+	pString=&string[0];
 	/*   init libs   */
 	PLL_init();
+	SPI_init(0x0F);
 	//LED_init();
 	InitKeys();
 	i2c_init();
 	UART_init();
 	mpu6050_init();
-	MRF24J40_init(0x0040);
+
+	MRF24J40_init(0xABBA);
+	//MRF24J40_wake();
+	delay_s(2);
 	//LED_put(0x00);
 	
 	///////////////////// Zend continu een pakketje ///////////////////
 	while(1)
  	{
- 	if (key_0==ReadKeys())
- 	{
- 		while (0 != ReadKeys());
-		 
- 		
-		//write_byte(0x68, 0x1C, 0x18);
+		string[0] = read_byte(0x68, MPU6050_ACCEL_XOUT_H);		// Accelerometer x_as uitlezen
+		//delay_ms(50);
+		string[1] = read_byte(0x68, MPU6050_ACCEL_XOUT_L);
+		//delay_ms(50);
+		string[2] = read_byte(0x68, MPU6050_ACCEL_YOUT_H);		// Accelerometer x_as uitlezen
+		//delay_ms(50);
+		string[3] = read_byte(0x68, MPU6050_ACCEL_YOUT_L);
+		//delay_ms(50);
+		string[4] = read_byte(0x68, MPU6050_ACCEL_ZOUT_H);		// Accelerometer x_as uitlezen
+		//delay_ms(50);
+		string[5] = read_byte(0x68, MPU6050_ACCEL_ZOUT_L);
+		//delay_ms(50);
+		string[6] = read_byte(0x68, MPU6050_GYRO_XOUT_H);		// Accelerometer x_as uitlezen
+		//delay_ms(50);
+		string[7] = read_byte(0x68, MPU6050_GYRO_XOUT_L);
+		//delay_ms(50);
+		string[8] = read_byte(0x68, MPU6050_GYRO_YOUT_H);		// Accelerometer x_as uitlezen
+		//delay_ms(50);
+		string[9] = read_byte(0x68, MPU6050_GYRO_YOUT_L);
+		//delay_ms(50);
+		string[10] = read_byte(0x68, MPU6050_GYRO_ZOUT_H);		// Accelerometer x_as uitlezen
+		//delay_ms(50);
+		string[11] = read_byte(0x68, MPU6050_GYRO_ZOUT_L);
+		delay_ms(50);
+		MRF24J40_send_string(pString,0xAABB);
 		
-		//if(key == key_0)
-		//{
-			test = read_byte(0x68, MPU6050_ACCEL_XOUT_H);		// Accelerometer x_as uitlezen
-			UART_putchar(test);
-			UART_put(" ");
-			key = key_9;
-		//}
-		
-		//test = read_byte(0x68, MPU6050_ACCEL_XOUT_H);		// Accelerometer x_as uitlezen
-		//UART_putchar(test);
- 		
-		//data = read_axis();
- 		//UART_putint(data);
- 		//UART_put(" ");
- 		
- 		//delay_ms(20);
- 		
- 		}
-	}
+ 	}
+
 
 	return 0;									// don't ever come near this
 }

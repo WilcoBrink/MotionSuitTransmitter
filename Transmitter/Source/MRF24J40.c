@@ -14,8 +14,8 @@
 #include "vic.h"
 #include "lcd.h"
 
-extern  void __enable_interrupts();
-extern  void __disable_interrupts();
+extern  void __enable_interrupts(void);
+extern  void __disable_interrupts(void);
 extern	char Received_Dataext[2]="T";
 extern	int zenddoor = 0x0000;
 

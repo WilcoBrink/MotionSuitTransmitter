@@ -22,22 +22,22 @@
 #define lcd_en_clr() IOCLR0 |= LCD_EN
 
 
-void lcd_wait();
+void lcd_wait(void);
 void lcd_out_data4(unsigned char);
 void lcd_write_nibbles(unsigned char);
 void lcd_write_control(unsigned char);
-void lcd_init();
-void lcd_clear();         
-void lcd_cursor_home();   
-void lcd_display_on();   
-void lcd_display_off();   
-void lcd_cursor_blink();  
-void lcd_cursor_on();   
-void lcd_cursor_off();    
-void lcd_cursor_left();  
-void lcd_cursor_right();
-void lcd_display_sleft();
-void lcd_display_sright(); 
+void lcd_init(void);
+void lcd_clear(void);
+void lcd_cursor_home(void);
+void lcd_display_on(void);
+void lcd_display_off(void);
+void lcd_cursor_blink(void);
+void lcd_cursor_on(void);
+void lcd_cursor_off(void);
+void lcd_cursor_left(void);
+void lcd_cursor_right(void);
+void lcd_display_sleft(void);
+void lcd_display_sright(void);
 void lcd_putchar(unsigned char);
 void lcd_print( char*);
 

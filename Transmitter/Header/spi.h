@@ -34,11 +34,11 @@
 #include "LPC214x.h"
 
 void SPI_init(unsigned char config);
-void SPI_set_8_bit();
-void SPI_set_12_bit();
-void SPI_set_16_bit();
-void SPI_set_low_speed();
-void SPI_set_high_speed();
+void SPI_set_8_bit(void);
+void SPI_set_12_bit(void);
+void SPI_set_16_bit(void);
+void SPI_set_low_speed(void);
+void SPI_set_high_speed(void);
 unsigned short SPI_put(unsigned short data);
 unsigned short SPI_get(unsigned short data);
 
