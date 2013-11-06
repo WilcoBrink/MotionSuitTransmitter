@@ -392,31 +392,31 @@ OUTPUT(./../Build/Project.elf elf32-littlearm)
  .debug_line    0x000007dd       0x8a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
  .debug_line    0x00000867       0x61 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
 
-.debug_str      0x00000000      0x6fc
- .debug_str     0x00000000       0x79 ./../Source/delay.o
-                                 0x86 (size before relaxing)
- .debug_str     0x00000079       0xaf ./../Source/I2C.o
-                                0x127 (size before relaxing)
- .debug_str     0x00000128       0x23 ./../Source/keys.o
-                                 0x8b (size before relaxing)
- .debug_str     0x0000014b      0x12c ./../Source/lcd.o
-                                0x187 (size before relaxing)
- .debug_str     0x00000277       0x3e ./../Source/leds.o
-                                 0x86 (size before relaxing)
- .debug_str     0x000002b5       0x27 ./../Source/main.o
-                                 0x7b (size before relaxing)
- .debug_str     0x000002dc       0x4f ./../Source/mpu6050.o
-                                 0xb3 (size before relaxing)
- .debug_str     0x0000032b      0x233 ./../Source/MRF24J40.o
-                                0x2b4 (size before relaxing)
- .debug_str     0x0000055e       0x19 ./../Source/pll.o
-                                 0x61 (size before relaxing)
- .debug_str     0x00000577       0x87 ./../Source/spi.o
-                                 0xf5 (size before relaxing)
- .debug_str     0x000005fe       0x9d ./../Source/uart.o
-                                0x11a (size before relaxing)
- .debug_str     0x0000069b       0x61 ./../Source/vic.o
-                                 0xc2 (size before relaxing)
+.debug_str      0x00000000      0x6fb
+ .debug_str     0x00000000       0x78 ./../Source/delay.o
+                                 0x85 (size before relaxing)
+ .debug_str     0x00000078       0xaf ./../Source/I2C.o
+                                0x126 (size before relaxing)
+ .debug_str     0x00000127       0x23 ./../Source/keys.o
+                                 0x8a (size before relaxing)
+ .debug_str     0x0000014a      0x12c ./../Source/lcd.o
+                                0x186 (size before relaxing)
+ .debug_str     0x00000276       0x3e ./../Source/leds.o
+                                 0x85 (size before relaxing)
+ .debug_str     0x000002b4       0x27 ./../Source/main.o
+                                 0x7a (size before relaxing)
+ .debug_str     0x000002db       0x4f ./../Source/mpu6050.o
+                                 0xb2 (size before relaxing)
+ .debug_str     0x0000032a      0x233 ./../Source/MRF24J40.o
+                                0x2b3 (size before relaxing)
+ .debug_str     0x0000055d       0x19 ./../Source/pll.o
+                                 0x60 (size before relaxing)
+ .debug_str     0x00000576       0x87 ./../Source/spi.o
+                                 0xf4 (size before relaxing)
+ .debug_str     0x000005fd       0x9d ./../Source/uart.o
+                                0x119 (size before relaxing)
+ .debug_str     0x0000069a       0x61 ./../Source/vic.o
+                                 0xc1 (size before relaxing)
 
 .debug_frame    0x00000000      0x860
  .debug_frame   0x00000000       0x58 ./../Source/delay.o
