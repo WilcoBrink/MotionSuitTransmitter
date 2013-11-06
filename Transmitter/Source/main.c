@@ -30,6 +30,7 @@ extern int main()
 
 	char string[11];
 	char *pString;
+	int test;
 	pString=&string[0];
 	/*   init libs   */
 	PLL_init();
