@@ -17,7 +17,7 @@
 #include "uart.h"
 #include "mpu6050.h"
 
-extern unsigned char received_data[42];
+extern	char Received_Dataext[42];
 
 extern  void __enable_interrupts(void);
 extern  void __disable_interrupts(void);
@@ -72,7 +72,7 @@ extern int main()
 		//delay_ms(50);
 		string[11] = read_byte(0x68, MPU6050_GYRO_ZOUT_L);
 		delay_ms(50);
-		MRF24J40_send_string(pString,0xAABB);
+		MRF24J40_send_string(pString,0xAABB);					// gaat dit wel goed?
 		
  	}
 

@@ -16,7 +16,7 @@
 
 extern  void __enable_interrupts(void);
 extern  void __disable_interrupts(void);
-extern	char Received_Dataext[2]="T";
+extern	char Received_Dataext[42]="T";
 extern	int zenddoor = 0x0000;
 
 int	busy = 0;

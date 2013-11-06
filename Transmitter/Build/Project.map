@@ -167,7 +167,7 @@ startup
                 0x00002cc8                . = ALIGN (0x4)
                 0x00002cc8                __ro_end = .
 
-.data           0x40000000       0x40 load address 0x00002cc8
+.data           0x40000000       0x3c load address 0x00002cc8
                 0x40000000                __data_beg__ = .
                 0x00002cc8                __data_beg_src__ = __ro_end
  *(.data)
@@ -178,61 +178,60 @@ startup
  .data          0x40000000        0x0 ./../Source/lcd.o
  .data          0x40000000        0x0 ./../Source/leds.o
  .data          0x40000000        0x0 ./../Source/main.o
- .data          0x40000000       0x2c ./../Source/mpu6050.o
-                0x40000000                received_data
- .data          0x4000002c        0x4 ./../Source/MRF24J40.o
-                0x4000002c                Received_Dataext
-                0x4000002e                errors
- .data          0x40000030        0x0 ./../Source/pll.o
- .data          0x40000030        0x0 ./../Source/spi.o
- .data          0x40000030       0x10 ./../Source/uart.o
- .data          0x40000040        0x0 ./../Source/vic.o
- .data          0x40000040        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
- .data          0x40000040        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+ .data          0x40000000        0x0 ./../Source/mpu6050.o
+ .data          0x40000000       0x2c ./../Source/MRF24J40.o
+                0x40000000                Received_Dataext
+                0x4000002a                errors
+ .data          0x4000002c        0x0 ./../Source/pll.o
+ .data          0x4000002c        0x0 ./../Source/spi.o
+ .data          0x4000002c       0x10 ./../Source/uart.o
+ .data          0x4000003c        0x0 ./../Source/vic.o
+ .data          0x4000003c        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+ .data          0x4000003c        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
  *(.data.*)
  *(.gnu.linkonce.d*)
-                0x40000040                . = ALIGN (0x4)
-                0x40000040                __data_end__ = .
-                0x40000040                __data_end = .
+                0x4000003c                . = ALIGN (0x4)
+                0x4000003c                __data_end__ = .
+                0x4000003c                __data_end = .
 
-.igot.plt       0x40000040        0x0 load address 0x00002d08
+.igot.plt       0x4000003c        0x0 load address 0x00002d04
  .igot.plt      0x00000000        0x0 crt0.o
 
-.bss            0x40000040       0xa4 load address 0x00002d08
-                0x40000040                __bss_start = .
-                0x40000040                __bss_beg__ = .
+.bss            0x4000003c       0xa4 load address 0x00002d04
+                0x4000003c                __bss_start = .
+                0x4000003c                __bss_beg__ = .
  *(.bss)
- .bss           0x40000040        0x0 crt0.o
- .bss           0x40000040        0x0 ./../Source/delay.o
- .bss           0x40000040        0x0 ./../Source/I2C.o
- .bss           0x40000040        0x0 ./../Source/keys.o
- .bss           0x40000040        0x0 ./../Source/lcd.o
- .bss           0x40000040        0x0 ./../Source/leds.o
- .bss           0x40000040        0x0 ./../Source/main.o
- .bss           0x40000040        0x0 ./../Source/mpu6050.o
- .bss           0x40000040        0xc ./../Source/MRF24J40.o
-                0x40000040                zenddoor
-                0x40000044                busy
-                0x40000048                sequence_number
- .bss           0x4000004c        0x0 ./../Source/pll.o
- .bss           0x4000004c        0x0 ./../Source/spi.o
- .bss           0x4000004c        0x0 ./../Source/uart.o
- .bss           0x4000004c        0x0 ./../Source/vic.o
- .bss           0x4000004c        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
- .bss           0x4000004c        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
-                0x4000004c                . = ALIGN (0x4)
- COMMON         0x4000004c        0x4 ./../Source/I2C.o
-                0x4000004c                state
- COMMON         0x40000050       0x94 ./../Source/MRF24J40.o
-                0x40000050                MRF24_Rx_Data
-                0x400000e0                adres2
-                0x400000e4                . = ALIGN (0x4)
-                0x400000e4                _end = .
-                0x400000e4                _bss_end__ = .
-                0x400000e4                __bss_end__ = .
-                0x400000e4                __end__ = .
-                0x400000e4                __bss_end = .
-                0x400000e4                PROVIDE (end, .)
+ .bss           0x4000003c        0x0 crt0.o
+ .bss           0x4000003c        0x0 ./../Source/delay.o
+ .bss           0x4000003c        0x0 ./../Source/I2C.o
+ .bss           0x4000003c        0x0 ./../Source/keys.o
+ .bss           0x4000003c        0x0 ./../Source/lcd.o
+ .bss           0x4000003c        0x0 ./../Source/leds.o
+ .bss           0x4000003c        0x0 ./../Source/main.o
+ .bss           0x4000003c        0x0 ./../Source/mpu6050.o
+ .bss           0x4000003c        0xc ./../Source/MRF24J40.o
+                0x4000003c                zenddoor
+                0x40000040                busy
+                0x40000044                sequence_number
+ .bss           0x40000048        0x0 ./../Source/pll.o
+ .bss           0x40000048        0x0 ./../Source/spi.o
+ .bss           0x40000048        0x0 ./../Source/uart.o
+ .bss           0x40000048        0x0 ./../Source/vic.o
+ .bss           0x40000048        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+ .bss           0x40000048        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+                0x40000048                . = ALIGN (0x4)
+ COMMON         0x40000048        0x4 ./../Source/I2C.o
+                0x40000048                state
+ COMMON         0x4000004c       0x94 ./../Source/MRF24J40.o
+                0x4000004c                MRF24_Rx_Data
+                0x400000dc                adres2
+                0x400000e0                . = ALIGN (0x4)
+                0x400000e0                _end = .
+                0x400000e0                _bss_end__ = .
+                0x400000e0                __bss_end__ = .
+                0x400000e0                __end__ = .
+                0x400000e0                __bss_end = .
+                0x400000e0                PROVIDE (end, .)
 LOAD ./../Source/delay.o
 LOAD ./../Source/I2C.o
 LOAD ./../Source/keys.o
@@ -300,37 +299,37 @@ OUTPUT(./../Build/Project.elf elf32-littlearm)
  .comment       0x00000000       0x12 ./../Source/uart.o
  .comment       0x00000000       0x12 ./../Source/vic.o
 
-.debug_info     0x00000000     0x1219
+.debug_info     0x00000000     0x11f9
  .debug_info    0x00000000       0xcd ./../Source/delay.o
  .debug_info    0x000000cd      0x20a ./../Source/I2C.o
  .debug_info    0x000002d7       0xa0 ./../Source/keys.o
  .debug_info    0x00000377      0x271 ./../Source/lcd.o
  .debug_info    0x000005e8       0x78 ./../Source/leds.o
  .debug_info    0x00000660       0x8b ./../Source/main.o
- .debug_info    0x000006eb       0xb2 ./../Source/mpu6050.o
- .debug_info    0x0000079d      0x4cd ./../Source/MRF24J40.o
- .debug_info    0x00000c6a       0x3c ./../Source/pll.o
- .debug_info    0x00000ca6      0x136 ./../Source/spi.o
- .debug_info    0x00000ddc      0x242 ./../Source/uart.o
- .debug_info    0x0000101e       0xd9 ./../Source/vic.o
- .debug_info    0x000010f7       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
- .debug_info    0x00001188       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+ .debug_info    0x000006eb       0x82 ./../Source/mpu6050.o
+ .debug_info    0x0000076d      0x4dd ./../Source/MRF24J40.o
+ .debug_info    0x00000c4a       0x3c ./../Source/pll.o
+ .debug_info    0x00000c86      0x136 ./../Source/spi.o
+ .debug_info    0x00000dbc      0x242 ./../Source/uart.o
+ .debug_info    0x00000ffe       0xd9 ./../Source/vic.o
+ .debug_info    0x000010d7       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+ .debug_info    0x00001168       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
 
-.debug_abbrev   0x00000000      0x7ff
+.debug_abbrev   0x00000000      0x7d1
  .debug_abbrev  0x00000000       0x76 ./../Source/delay.o
  .debug_abbrev  0x00000076       0xec ./../Source/I2C.o
  .debug_abbrev  0x00000162       0x73 ./../Source/keys.o
  .debug_abbrev  0x000001d5       0xac ./../Source/lcd.o
  .debug_abbrev  0x00000281       0x6f ./../Source/leds.o
  .debug_abbrev  0x000002f0       0x6e ./../Source/main.o
- .debug_abbrev  0x0000035e       0x8e ./../Source/mpu6050.o
- .debug_abbrev  0x000003ec      0x18d ./../Source/MRF24J40.o
- .debug_abbrev  0x00000579       0x2c ./../Source/pll.o
- .debug_abbrev  0x000005a5       0xb0 ./../Source/spi.o
- .debug_abbrev  0x00000655      0x106 ./../Source/uart.o
- .debug_abbrev  0x0000075b       0x7c ./../Source/vic.o
- .debug_abbrev  0x000007d7       0x14 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
- .debug_abbrev  0x000007eb       0x14 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+ .debug_abbrev  0x0000035e       0x60 ./../Source/mpu6050.o
+ .debug_abbrev  0x000003be      0x18d ./../Source/MRF24J40.o
+ .debug_abbrev  0x0000054b       0x2c ./../Source/pll.o
+ .debug_abbrev  0x00000577       0xb0 ./../Source/spi.o
+ .debug_abbrev  0x00000627      0x106 ./../Source/uart.o
+ .debug_abbrev  0x0000072d       0x7c ./../Source/vic.o
+ .debug_abbrev  0x000007a9       0x14 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+ .debug_abbrev  0x000007bd       0x14 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
 
 .debug_loc      0x00000000      0xc8c
  .debug_loc     0x00000000       0x84 ./../Source/delay.o
@@ -392,30 +391,30 @@ OUTPUT(./../Build/Project.elf elf32-littlearm)
  .debug_line    0x000007dd       0x8a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
  .debug_line    0x00000867       0x61 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
 
-.debug_str      0x00000000      0x6fc
+.debug_str      0x00000000      0x6f3
  .debug_str     0x00000000       0x79 ./../Source/delay.o
                                  0x86 (size before relaxing)
- .debug_str     0x00000079       0xaf ./../Source/I2C.o
+ .debug_str     0x00000079       0xb4 ./../Source/I2C.o
                                 0x127 (size before relaxing)
- .debug_str     0x00000128       0x23 ./../Source/keys.o
+ .debug_str     0x0000012d       0x23 ./../Source/keys.o
                                  0x8b (size before relaxing)
- .debug_str     0x0000014b      0x12c ./../Source/lcd.o
+ .debug_str     0x00000150      0x12c ./../Source/lcd.o
                                 0x187 (size before relaxing)
- .debug_str     0x00000277       0x3e ./../Source/leds.o
+ .debug_str     0x0000027c       0x3e ./../Source/leds.o
                                  0x86 (size before relaxing)
- .debug_str     0x000002b5       0x27 ./../Source/main.o
+ .debug_str     0x000002ba       0x27 ./../Source/main.o
                                  0x7b (size before relaxing)
- .debug_str     0x000002dc       0x4f ./../Source/mpu6050.o
-                                 0xb3 (size before relaxing)
- .debug_str     0x0000032b      0x233 ./../Source/MRF24J40.o
+ .debug_str     0x000002e1       0x41 ./../Source/mpu6050.o
+                                 0x8e (size before relaxing)
+ .debug_str     0x00000322      0x233 ./../Source/MRF24J40.o
                                 0x2b4 (size before relaxing)
- .debug_str     0x0000055e       0x19 ./../Source/pll.o
+ .debug_str     0x00000555       0x19 ./../Source/pll.o
                                  0x61 (size before relaxing)
- .debug_str     0x00000577       0x87 ./../Source/spi.o
+ .debug_str     0x0000056e       0x87 ./../Source/spi.o
                                  0xf5 (size before relaxing)
- .debug_str     0x000005fe       0x9d ./../Source/uart.o
+ .debug_str     0x000005f5       0x9d ./../Source/uart.o
                                 0x11a (size before relaxing)
- .debug_str     0x0000069b       0x61 ./../Source/vic.o
+ .debug_str     0x00000692       0x61 ./../Source/vic.o
                                  0xc2 (size before relaxing)
 
 .debug_frame    0x00000000      0x860
