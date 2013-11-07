@@ -17,7 +17,7 @@
 #include "uart.h"
 #include "mpu6050.h"
 
-extern unsigned char received_data[42];
+extern	char Received_Dataext[42];
 
 extern  void __enable_interrupts(void);
 extern  void __disable_interrupts(void);
@@ -25,10 +25,10 @@ extern  void __disable_interrupts(void);
 /******************************************************************************\
  main
 \******************************************************************************/
-extern int main()
+extern int main(void)
 { 
 
-	char string[11];
+	char string[13];
 	char *pString;
 	pString=&string[0];
 	/*   init libs   */
@@ -46,6 +46,7 @@ extern int main()
 	//LED_put(0x00);
 	
 	///////////////////// Zend continu een pakketje ///////////////////
+	string[12] = '\0';
 	while(1)
  	{
 		string[0] = read_byte(0x68, MPU6050_ACCEL_XOUT_H);		// Accelerometer x_as uitlezen
@@ -72,7 +73,9 @@ extern int main()
 		//delay_ms(50);
 		string[11] = read_byte(0x68, MPU6050_GYRO_ZOUT_L);
 		delay_ms(50);
-		MRF24J40_send_string(pString,0xAABB);
+		//string[0], string[2], string[4], string[6], string[8], string[10] = 0x30;
+		//string[1], string[3], string[5], string[7], string[9], string[11] = 0x39;
+		MRF24J40_send_string(pString,0xAABB);					// gaat dit wel goed?
 		
  	}
 

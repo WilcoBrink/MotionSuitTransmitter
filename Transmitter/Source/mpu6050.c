@@ -5,8 +5,6 @@
 #include "uart.h"
 #include "leds.h"
 
-extern unsigned char received_data[42]="data";
-
 // Vic setup
 #define MPU6050_PRIOR			1
 #define EINT1_INT_SLOT		15

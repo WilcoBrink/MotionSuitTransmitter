@@ -20,7 +20,7 @@ void i2c_write(unsigned char Data);
 void i2c_stop(void);
 signed char i2c_read(void);
 void write_byte(char address, char reg, char data);
-signed char read_byte(char address,char reg);
+unsigned char read_byte(char address,char reg);
 
 #define tekenbit   0x80
 
