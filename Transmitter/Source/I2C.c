@@ -29,7 +29,7 @@ signed char testfunctie()
 	return data;
 }
 
-signed char read_byte(char address, char reg)
+unsigned char read_byte(char address, char reg)
 {
     signed char meting;
 	i2c_send_address(address<<1);
