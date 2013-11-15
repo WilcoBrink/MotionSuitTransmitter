@@ -86,6 +86,6 @@
 #define MPU6050_FIFO_R_W           0x74   // R/W
 #define MPU6050_WHO_AM_I           0x75   // R
 
-void mpu6050_init(void);
+void mpu6050_init(char address);
 void mpu6050_interrupt(void);
 void mpu6050_reset(void);

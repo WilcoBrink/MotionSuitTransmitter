@@ -10,31 +10,31 @@
 #define EINT1_INT_SLOT		15
 #define MPU6050_EINT		0x01
 
-void mpu6050_init()
+void mpu6050_init(char address)
 {
 	//Sets sample rate to 8000/1+7 = 1000Hz
-    write_byte(0x68, MPU6050_SMPLRT_DIV, 0x9F);		//50Hz
+    write_byte(address, MPU6050_SMPLRT_DIV, 0x9F);		//50Hz
     //Disable FSync, 256Hz DLPF
-    write_byte(0x68, MPU6050_CONFIG, 0x00);
+    write_byte(address, MPU6050_CONFIG, 0x00);
     //Disable gyro self tests, scale of 500 degrees/s
-    write_byte(0x68, MPU6050_GYRO_CONFIG, 0x08);
+    write_byte(address, MPU6050_GYRO_CONFIG, 0x08);
     //Disable accel self tests, scale of +-2g, no DHPF
-    write_byte(0x68, MPU6050_ACCEL_CONFIG, 0x00);
+    write_byte(address, MPU6050_ACCEL_CONFIG, 0x00);
     //Freefall threshold of |0mg|
-    write_byte(0x68, MPU6050_FF_THR, 0x00);
+    write_byte(address, MPU6050_FF_THR, 0x00);
     //Freefall duration limit of 0
-    write_byte(0x68, MPU6050_FF_DUR, 0x00);
+    write_byte(address, MPU6050_FF_DUR, 0x00);
     //Motion threshold of 0mg
-    write_byte(0x68, MPU6050_MOT_THR, 0x00);
+    write_byte(address, MPU6050_MOT_THR, 0x00);
     //Motion duration of 0s
-    write_byte(0x68, MPU6050_MOT_DUR, 0x00);
+    write_byte(address, MPU6050_MOT_DUR, 0x00);
     //Zero motion threshold
-    write_byte(0x68, MPU6050_ZRMOT_THR, 0x00);
+    write_byte(address, MPU6050_ZRMOT_THR, 0x00);
     //Zero motion duration threshold
-    write_byte(0x68, MPU6050_ZRMOT_DUR, 0x00);
+    write_byte(address, MPU6050_ZRMOT_DUR, 0x00);
     //Disable sensor output to FIFO buffer
-    write_byte(0x68, MPU6050_FIFO_EN, 0x00); 
-    write_byte(0x68, MPU6050_PWR_MGMT_1, 0x00);   
+    write_byte(address, MPU6050_FIFO_EN, 0x00);
+    write_byte(address, MPU6050_PWR_MGMT_1, 0x00);
     //write_byte(0x68, MPU6050_SIGNAL_PATH_RESET, 0x07);  
 
 	//PINSEL0 |= 0x20000000;
