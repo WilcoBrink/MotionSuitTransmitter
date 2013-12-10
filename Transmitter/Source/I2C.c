@@ -1,126 +1,646 @@
-#include "LPC214x.h"
-#include "I2C.h"
-#include "mpu6050.h"
+/******************************************************************************
+ * Includes
+ *****************************************************************************/
 
-#define I2C_STA	0x20	// Startbit (set, test)
-#define I2C_SIC	0x08	// Interuptbit (clear)
-#define I2C_SI	0x08	// Interuptbit (test)
-#define I2C_STO	0x10	// Stopbit (set)
-#define I2C_STAC  0x20	// Startbit (clear)
-#define I2C_AA	0x04	// Acknowledgebit (test)
+#include "i2c.h"
+#include <LPC214x.h>
+#include "delay.h"
 
-unsigned int state;
-
-int read_axis()
+unsigned char i2cCheckStatus(void)
 {
-	unsigned char data_h, data_l;
-	int size;
-	data_h = read_byte(0x68, MPU6050_ACCEL_XOUT_H);
-	data_l = read_byte(0x68, MPU6050_ACCEL_XOUT_L);
-	size = (data_h<<8) + data_l;
-	return size;
+  unsigned char status = 0;
+
+  /* wait for I2C Status changed */
+  while( (I2C0CONSET & 0x08)  == 0);   /* while SI == 0 */
+
+  /* Read I2C State */
+  status = I2C0STAT;
+
+  /* NOTE! SI flag is not cleared here */
+  return status;
 }
 
-signed char testfunctie()
+/******************************************************************************
+ * Description:
+ *    Reset the I2C module.
+ *****************************************************************************/
+void i2cInit(void)
 {
-	signed char data;
-	write_byte(0x68, MPU6050_SMPLRT_DIV, 0x07);
-	data = read_byte(0x68, MPU6050_SMPLRT_DIV);
-	return data;
+	PINSEL0  |= (1<<6)|(1<<4);				// set P0.2 as SCL0 I2C0 and set P0.3 as SDA0 I2C0
+
+	/* clear flags */
+	I2C0CONCLR = 0x6c;
+
+	I2C0SCLH   = 300;      	// Set count for SCL High period          150 for 400 kHz I2C clock, High and Low time equal
+	I2C0SCLL   = 300;      	// Set count for SCL Low period           150 for 400 kHz I2C clock
+
+	/* reset registers */
+	I2C0ADR   = ( I2C0ADR   & ~I2C_REG_ADDR_MASK )   | I2C_REG_ADDR;		//set I2C0 address to 0
+	I2C0CONSET = ( I2C0CONSET & ~I2C_REG_CONSET_MASK ) | I2C_REG_CONSET;	//enable I2C0 interface
 }
 
-unsigned char read_byte(char address, char reg)
+/******************************************************************************
+ * Description:
+ *    Generates a start condition on I2C when bus is free.
+ *    Master mode will also automatically be entered.
+ *
+ *    Note: After a stop condition, you may need a bus free time before you
+ *          can generate a new start condition.
+ *
+ * Returns:
+ *    I2C_CODE_OK or I2C status code
+ *****************************************************************************/
+signed char i2cStart(void)
 {
-    signed char meting;
-	i2c_send_address(address<<1);
-    //delay_us(500);
-	i2c_write(reg);
-    //delay_us(500);
-	i2c_send_address((address<<1) | 0x01);
-    //delay_us(500);
-	meting = i2c_read();
-	i2c_stop();
-	return meting;
+  unsigned char status  = 0;
+  signed char retCode = 0;
+
+  /* issue a start condition */
+  I2C0CONSET |= 0x20; /* STA = 1, set start flag */
+
+  /* wait until START transmitted */
+  while(1)
+  {
+    status = i2cCheckStatus();
+
+    /* start transmitted */
+    if((status == 0x08) || (status == 0x10))
+    {
+      retCode = I2C_CODE_OK;
+      break;
+    }
+    /* error */
+    else if(status != 0xf8)
+    {
+      retCode = (signed char) status;
+      break;
+    }
+    else
+    {
+      /* clear SI flag */
+      I2C0CONCLR = 0x08;
+    }    
+  }
+
+  /* clear start flag */
+  I2C0CONCLR = 0x20;
+
+  return retCode;
 }
 
-void write_byte(char address, char reg, char data)
+/******************************************************************************
+ * Description:
+ *    Generates a start condition on I2C when bus is free.
+ *    Master mode will also automatically be entered.
+ *
+ *    Note: After a stop condition, you may need a bus free time before you
+ *          can generate a new start condition.
+ *
+ * Returns:
+ *    I2C_CODE_OK or I2C status code
+ *****************************************************************************/
+signed char i2cRepeatStart(void)
 {
-	i2c_send_address(address<<1);
-	i2c_write(reg);
-	i2c_write(data);
-	i2c_stop();
+  unsigned char status  = 0;
+  signed char retCode = 0;
+
+  /* issue a start condition */
+  I2C0CONSET |= 0x20; /* STA = 1, set start flag */
+  I2C0CONCLR = 0x08;  /* clear SI flag           */
+
+  /* wait until START transmitted */
+  while(1)
+  {
+    status = i2cCheckStatus();
+
+    /* start transmitted */
+    if((status == 0x08) || (status == 0x10))
+    {
+      retCode = I2C_CODE_OK;
+      break;
+    }
+    /* error */
+    else if(status != 0xf8)
+    {
+      retCode = (signed char) status;
+      break;
+    }
+    else
+    {
+      /* clear SI flag */
+      I2C0CONCLR = 0x08;
+    }    
+  }
+
+  /* clear start flag */
+  I2C0CONCLR = 0x20;
+
+  return retCode;
 }
 
-void i2c_init()
+/******************************************************************************
+ * Description:
+ *    Generates a stop condition in master mode or recovers from an error
+ *    condition in slave mode.
+ *
+ *    Note: After this function is run, you may need a bus free time before
+ *          you can generate a new start condition.
+ *
+ * Returns:
+ *    I2C_CODE_OK
+ *****************************************************************************/
+signed char i2cStop(void)
 {
-   	I2C0CONCLR = 0xFF;                      // clr I2C0 status register
-    
-   	PINSEL0  |= (1<<6)|(1<<4);				// set P0.2 as SCL0 I2C0 and set P0.3 as SDA0 I2C0
-    
-    I2C0SCLH   = 150;      	// Set count for SCL High period          150 for 100 kHz I2C clock, High and Low time equal
-	I2C0SCLL   = 150;      	// Set count for SCL Low period           150 for 100 kHz I2C clock
-	I2C0CONSET = 0x40;      // Enable I2C0 interface and set it to Master mode
+  I2C0CONSET |= 0x10; /* STO = 1, set stop flag */
+  I2C0CONCLR = 0x08;  /* clear SI flag          */
+
+  /* wait for STOP detected (while STO = 1) */
+  while((I2C0CONSET & 0x10) == 0x10 );
+
+  return I2C_CODE_OK;
 }
 
-void i2c_send_address(unsigned char Addr_S)
+/******************************************************************************
+ * Description:
+ *    Sends a character on the I2C network
+ *
+ * Params:
+ *    [in] data - the character to send
+ *
+ * Returns:
+ *    I2C_CODE_OK   - successful
+ *    I2C_CODE_BUSY - data register is not ready -> byte was not sent
+ *****************************************************************************/
+signed char i2cPutChar(unsigned char data)
 {
-   if(!(Addr_S & 0x01))               // test whether it is reading
-   {
-	   I2C0CONSET = I2C_STA;         // set STA - allow master to acknowlege slave;
-   	   while(I2C0STAT != 0x08);
-   	   I2C0DAT    = Addr_S;
-   	   I2C0CONCLR = I2C_SIC|I2C_STAC;
-   	   while(I2C0STAT != 0x18 && !(I2C0CONSET & I2C_SI));
-   }
-   else// looks like master reciever
-   {
-	   I2C0CONSET = I2C_STA;
-	   I2C0CONCLR = I2C_SIC;
-	   while(I2C0STAT != 0x10 && !(I2C0CONSET & I2C_SI)); 	// Startbitsetzen und auf Start warten >>start element setting and on start wait
-	   I2C0DAT    = Addr_S;						// Partneradresse laden >> slave address load
-	   I2C0CONCLR = I2C_SIC|I2C_STAC;					// I2C IR-bit löschen und senden starten>>I2C IR bit to delete and send start
-	   while(I2C0STAT != 0x40 && !(I2C0CONSET & I2C_SI));	// auf ACK warten >>on ACK wait
-   }
+  signed char retCode = 0;
+
+  /* check if I2C Data register can be accessed */
+  if((I2C0CONSET & 0x08) != 0)  /* if SI = 1 */
+  {
+    /* send data */
+    I2C0DAT   = data;
+    I2C0CONCLR = 0x08; /* clear SI flag */
+    retCode    = I2C_CODE_OK;
+  }
+  else
+  {
+    /* data register not ready */
+    retCode = I2C_CODE_BUSY;
+  }
+
+  return retCode;
 }
 
-void i2c_write(unsigned char Data)
+/******************************************************************************
+ * Description:
+ *    Read a character. I2C master mode is used.
+ *    This function is also used to prepare if the master shall generate
+ *    acknowledge or not acknowledge.
+ *
+ * Params:
+ *    [in]  mode  - I2C_MODE_ACK0 Set ACK=0. Slave sends next byte
+ *                  I2C_MODE_ACK1 Set ACK=1. Slave sends last byte
+ *                  I2C_MODE_READ Read data from data register
+ *    [out] pData - a pointer to where the data shall be saved.
+ *
+ * Returns:
+ *    I2C_CODE_OK    - successful
+ *    I2C_CODE_EMPTY - no data is available
+ *****************************************************************************/
+signed char i2cGetChar(unsigned char  mode, unsigned char* pData)
 {
-   I2C0DAT    = Data;                // Charge Data
-   I2C0CONCLR = I2C_SIC;                 // SIC; Clear I2C interrupt bit to send the data
-   while(I2C0STAT != 0x28 && !(I2C0CONSET & I2C_SI));     // wait till status available
+  signed char retCode = I2C_CODE_OK;
+
+  if(mode == I2C_MODE_ACK0)
+  {
+    /* the operation mode is changed from master transmit to master receive */
+    /* set ACK=0 (informs slave to send next byte) */
+
+    I2C0CONSET |= 0x04; /* AA=1          */
+    I2C0CONCLR = 0x08;  /* clear SI flag */
+  }
+  else if(mode == I2C_MODE_ACK1)
+  {
+    /* set ACK=1 (informs slave to send last byte) */
+    I2C0CONCLR = 0x04;
+    I2C0CONCLR = 0x08; /* clear SI flag */
+  }
+  else if(mode == I2C_MODE_READ)
+  {
+    /* check if I2C Data register can be accessed */
+    if((I2C0CONSET & 0x08) != 0)  /* SI = 1 */
+    {
+      /* read data  */
+      *pData = (unsigned char) I2C0DAT;
+    }
+    else
+    {
+      /* No data available */
+      retCode = I2C_CODE_EMPTY;
+    }
+  }
+
+  return retCode;
 }
 
-void i2c_stop(void)
+/******************************************************************************
+ * Description:
+ *    Sends data on the I2C network
+ *
+ *    Note: After this function is run, you may need a bus free time before a
+ *          new data transfer can be initiated.
+ *
+ * Params:
+ *    [in] addr  - address
+ *    [in] pData - data to transmit
+ *    [in] len   - number of bytes to transmit
+ *
+ * Returns:
+ *    I2C_CODE_OK    - successful
+ *    I2C_CODE_ERROR - an error occured
+ *****************************************************************************/
+signed char i2cWrite(unsigned char addr, unsigned char reg, unsigned char* pData, unsigned short length)
 {
-   I2C0CONCLR = I2C_SIC;
-   I2C0CONSET = I2C_STO;
-   while((I2C0CONSET & I2C_STO));          // wait for Stopped I2C bus
+  signed char retCode = 0;
+  unsigned char status = 0;
+  unsigned char i = 0;
+
+  /* generate Start condition */
+  retCode = i2cStart();
+
+  /* Transmit address */
+  if(retCode == I2C_CODE_OK)
+  {
+    /* write SLA+W */
+    retCode = i2cPutChar(addr<<1);
+    while(retCode == I2C_CODE_BUSY)
+    {
+      retCode = i2cPutChar(addr<<1);
+    }
+  }
+
+  /* Transmit register */
+  if(retCode == I2C_CODE_OK)
+  {
+	  /* write SLA+W */
+      retCode = i2cPutChar(reg);
+      while(retCode == I2C_CODE_BUSY)
+      {
+        retCode = i2cPutChar(reg);
+      }
+  }
+
+  if(retCode == I2C_CODE_OK)
+  {
+    /* wait until address transmitted and transmit data */
+    for(i = 0; i < length; i++)
+    {
+      /* wait until data transmitted */
+      while(1)
+      {
+        /* get new status */
+        status = i2cCheckStatus();
+
+        /*
+         * SLA+W transmitted, ACK received or
+         * data byte transmitted, ACK received
+         */
+        if( (status == 0x18) || (status == 0x28) )
+        {
+          /* Data transmitted and ACK received */
+
+          /* write data */
+          retCode = i2cPutChar(*pData);
+          while(retCode == I2C_CODE_BUSY)
+          {
+            retCode = i2cPutChar(*pData);
+          }
+          pData++;
+
+          break;
+        }
+        /* no relevant status information */
+        else if( status != 0xf8 )
+        {
+          /* error */
+          i = length;
+          retCode = I2C_CODE_ERROR;
+          break;
+        }
+      }
+    }
+  }
+
+  /* wait until data transmitted */
+  while(1)
+  {
+    /* get new status */
+    status = i2cCheckStatus();
+
+    /*
+     * SLA+W transmitted, ACK received or
+     * data byte transmitted, ACK received
+     */
+    if( (status == 0x18) || (status == 0x28) )
+    {
+      /* data transmitted and ACK received */
+      break;
+    }
+    /* no relevant status information */
+    else if(status != 0xf8 )
+    {
+      /* error */
+      i = length;
+      retCode = I2C_CODE_ERROR;
+      break;
+    }
+  }
+
+  /* generate Stop condition */
+  i2cStop();
+
+  return retCode;
 }
 
-signed char i2c_read(void)
-{
-	/*I2C0CONCLR = SIC;
-	while( ! ( I2C0CONSET & SI)) ; // wait till status available
-	{
-		state=I2C0STAT;
-		if(state == 0x50)
-		{
-			return I2C0DAT;
-		}
-		else
-		if(state== 0x58)
-		{
-		i2c_stop();
-		}
+/******************************************************************************
+ * Description:
+ *    abc
+ *
+ * Params:
+ *    [in]
+ *
+ * Returns:
+ *
+ *****************************************************************************/
+void i2cWriteBits(unsigned char addr, unsigned char reg, unsigned char bitStart, unsigned char length, unsigned char data) {
+    //      010 value to write
+    // 76543210 bit numbers
+    //      xxx args: bitStart=4, length=3
+    // 00011100 mask byte
+    // 10101111 original value (sample)
+    // 10100011 original & ~mask
+    // 10101011 masked | value
+	if(length > 0) {
+		unsigned char b = 0;
+		//b = i2c_read_byte(addr, reg);
+		i2cRead(addr, reg, &b, 1);
+		//if (b != 0) { //get current data
+			unsigned char mask = ((1 << length) - 1) << (bitStart - length + 1);
+			data <<= (bitStart - length + 1); // shift data into correct position
+			data &= mask; // zero all non-important bits in data
+			b &= ~(mask); // zero all important bits in existing byte
+			b |= data; // combine data with existing byte
+			i2cWrite(addr, reg, &b, 1);
+		//}
 	}
-	return 0;*/
-
-	signed char IIC_DATA=0x00;
-	//ACK from the master
-	I2C0CONCLR = I2C_SIC;	// Interrupt löschen und empfangen starten>>interrupts to delete and received start /
-	while(I2C0STAT != 0x28 && !(I2C0CONSET & I2C_SI));// wenn fertg, ACK senden >>//wait the data
-	IIC_DATA = I2C0DAT;	// Daten uebernehmen >>  //read data
-
-	return IIC_DATA;
 }
 
+/******************************************************************************
+ * Description:
+ *    abc
+ *
+ * Params:
+ *    [in]
+ *
+ * Returns:
+ *
+ *****************************************************************************/
+void i2cWriteBit(unsigned char addr, unsigned char reg, unsigned char bitNum, unsigned char data) {
+	unsigned char b, c = 0;
+	i2cRead(addr, reg, &b, 1);
+	c = (data != 0) ? (b | (1 << bitNum)) : (b & ~(1 << bitNum));
+	i2cWrite(addr, reg, &c, 1);
+}
+
+/******************************************************************************
+ * Description:
+ *    abc
+ *
+ * Params:
+ *    [in]
+ *
+ * Returns:
+ *
+ *****************************************************************************/
+signed char i2cWaitTransmit(void)
+{
+  unsigned char status = 0;
+
+  /* wait until data transmitted */
+  while(1)
+  {
+    /* get new status */
+    status = i2cCheckStatus();
+
+    /*
+     * SLA+W transmitted, ACK received or
+     * data byte transmitted, ACK received
+     */
+    if( (status == 0x18) || (status == 0x28) )
+    {
+      /* data transmitted and ACK received */
+      return I2C_CODE_OK;
+    }
+    /* no relevant status information */
+    else if(status != 0xf8 )
+    {
+      /* error */
+      return I2C_CODE_ERROR;
+    }
+  }
+}
+
+signed char i2cWriteWithWait(unsigned char data)
+{
+  signed char retCode = 0;
+ 
+  retCode = i2cPutChar(data);
+  while(retCode == I2C_CODE_BUSY)
+  {
+    retCode = i2cPutChar(data);
+  }
+
+  if(retCode == I2C_CODE_OK)
+    retCode = i2cWaitTransmit();
+
+  return retCode;
+}
+
+signed char i2cMyWrite(unsigned char addr, unsigned char* pData, unsigned short length)
+{
+  signed char retCode = 0;
+  unsigned char i = 0;
+
+  do
+  {
+    /* generate Start condition */
+    retCode = i2cStart();
+    if(retCode != I2C_CODE_OK)
+      break;
+
+    /* write address */
+    retCode = i2cWriteWithWait(addr);
+    if(retCode != I2C_CODE_OK)
+      break;
+
+    for(i = 0; i <length; i++)
+    {
+      retCode = i2cWriteWithWait(*pData);
+      if(retCode != I2C_CODE_OK)
+        break;
+
+      pData++;
+    }
+
+  } while(0);
+
+  /* generate Stop condition */
+  i2cStop();
+
+  return retCode;
+}
+
+
+/******************************************************************************
+ * Description:
+ *    Read a specified number of bytes from the I2C network.
+ *
+ *    Note: After this function is run, you may need a bus free time before a
+ *          new data transfer can be initiated.
+ *
+ * Params:
+ *    [in] addr - address
+ *    [in] pBuf - receive buffer
+ *    [in] len  - number of bytes to receive
+ *
+ * Returns:
+ *    I2C_CODE_OK or I2C status code
+ *****************************************************************************/
+signed char i2cRead(unsigned char addr, unsigned char reg, unsigned char* pBuf, unsigned short length)
+{
+  signed char retCode = 0;
+  unsigned char status  = 0;
+  unsigned char i = 0;
+
+  /* Generate Start condition */
+  retCode = i2cStart();
+
+  /* Transmit address */
+  if(retCode == I2C_CODE_OK )
+  {
+    /* write SLA+R */
+    retCode = i2cPutChar(addr<<1);
+    while(retCode == I2C_CODE_BUSY)
+    {
+      retCode = i2cPutChar(addr<<1);
+    }
+  }
+
+  /* Transmit register */
+    if(retCode == I2C_CODE_OK)
+    {
+  	  /* write SLA+W */
+        retCode = i2cPutChar(reg);
+        while(retCode == I2C_CODE_BUSY)
+        {
+          retCode = i2cPutChar(reg);
+        }
+    }
+
+    delay_us(100);
+
+    /* Generate Start condition */
+    retCode = i2cRepeatStart();
+
+    /* Transmit address */
+    if(retCode == I2C_CODE_OK )
+    {
+    	/* write SLA+R */
+    	retCode = i2cPutChar((addr<<1) | 0x01);
+    	while(retCode == I2C_CODE_BUSY)
+    	{
+    		retCode = i2cPutChar((addr<<1) | 0x01);
+    	}
+    }
+
+
+  if(retCode == I2C_CODE_OK )
+  {
+    /* wait until address transmitted and receive data */
+    for(i = 1; i <= length; i++ )
+    {
+      /* wait until data transmitted */
+      while(1)
+      {
+        /* get new status */
+        status = i2cCheckStatus();
+
+        /*
+         * SLA+R transmitted, ACK received or
+         * SLA+R transmitted, ACK not received
+         * data byte received in master mode, ACK transmitted
+         */
+        if((status == 0x40 ) || (status == 0x48 ) || (status == 0x50 ))
+        {
+          /* data received */
+
+          if(i == length)
+          {
+            /* Set generate NACK */
+            retCode = i2cGetChar(I2C_MODE_ACK1, pBuf);
+          }
+          else
+          {
+            retCode = i2cGetChar(I2C_MODE_ACK0, pBuf);
+          }
+
+          /* Read data */
+          retCode = i2cGetChar(I2C_MODE_READ, pBuf);
+          while(retCode == I2C_CODE_EMPTY)
+          {
+            retCode = i2cGetChar(I2C_MODE_READ, pBuf);
+          }
+          pBuf++;
+
+          break;
+        }
+
+        /* no relevant status information */
+        else if(status != 0xf8 )
+        {
+          /* error */
+          i = length;
+          retCode = I2C_CODE_ERROR;
+          break;
+        }
+      }
+    }
+  }
+
+  /*--- Generate Stop condition ---*/
+  i2cStop();
+
+  return retCode;
+}
+
+// Read bits from chip register
+char i2cReadBits(char addr, unsigned char reg, unsigned char bitStart, unsigned char length, unsigned char *data) {
+    // 01101001 read byte
+    // 76543210 bit numbers
+    //    xxx   args: bitStart=4, length=3
+    //    010   masked
+    //   -> 010 shifted
+    char count = 0;
+    if(length > 0) {
+		unsigned char b = 0;
+		if ((count = i2cRead(addr, reg, &b, 1)) != 0) {
+			//b = count;
+			unsigned char mask = ((1 << length) - 1) << (bitStart - length + 1);
+			b &= mask;
+			b >>= (bitStart - length + 1);
+			*data = b;
+		}
+    }
+    return count;
+}

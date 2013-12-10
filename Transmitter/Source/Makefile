@@ -71,7 +71,7 @@ all: $(ELF) $(HEX)
 # rule om .elf file te creëren (hier wordt het werkelijke compileerwerk gedaan)
 # let op: crt0.o wordt ge-exclude, want die wordt apart gemaakt.
 $(ELF):	$(ALL_SOURCES)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(filter-out %crt0.o,$(ALL_SOURCES)) -o $(ELF)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(filter-out %crt0.o,$(ALL_SOURCES)) -o $(ELF) -lm
 
 # forceer ctr0.s met GCC te compileren, en niet met AS,
 # hierdoor verschijnt crt0.s in insight
