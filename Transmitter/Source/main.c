@@ -22,10 +22,6 @@
 extern	char Received_Dataext[42];
 void init_interrupt(void);
 void mpu6050_interrupt(void);
-void init_timer(void);
-void TimerStartTwee(void);
-void TimerResetTwee(void);
-void TimerStopTwee(void);
 extern  void __enable_interrupts(void);
 extern  void __disable_interrupts(void);
 
@@ -49,9 +45,11 @@ extern int main(void)
 	short gy = 0;
 	short gz = 0;
 
-	/*char string[25];
+	int temp = 0;
+	char string[23];
+	string[23] = '\0';
 	char *pString;
-	pString=&string[0];*/
+	pString=&string[0];
 	/*   init libs   */
 	PLL_init();
 	SPI_init(0x0F);
@@ -60,10 +58,9 @@ extern int main(void)
 	i2cInit();
 	UART_init();
 	MRF24J40_init(0xABBA);
-	//MRF24J40_wake();
+	MRF24J40_wake();
 	delay_s(2);
 	
-	//init_timer();
 	init_interrupt();
 
 	mpu6050_init(0x68);
@@ -73,56 +70,48 @@ extern int main(void)
 	__enable_interrupts();
 
 	///////////////////// Zend continu een pakketje ///////////////////
-	//string[24] = '\0';
-	//TimerStartTwee();
 	while(1)
  	{
 		if(mpu6050_getQuaternionWait(0x68, &qw, &qx, &qy, &qz)) {
-			__disable_interrupts();
-			mpu6050_getRollPitchYaw(qw, qx, qy, qz, &roll, &pitch, &yaw);
+			//__disable_interrupts();
 			mpu6050_getRawData(0x68, &ax, &ay, &az, &gx, &gy, &gz);
-			//UART_putint((int)qw*1000);
-			//UART_putint((int)qx*1000);
-			//UART_putint((int)qy*1000);
-			//UART_putint((int)qz*1000);
-			//UART_put("/n");
-			//UART_putint((int)((roll*180)/M_PI));
-			//UART_putint((int)((pitch*180)/M_PI));
-			//UART_putint((int)((yaw*180)/M_PI));
-			//UART_putint(1000);
-			//UART_put("/n");
-			__enable_interrupts();
+			mpu6050_getRollPitchYaw(qw, qx, qy, qz, &roll, &pitch, &yaw);
+
+			int i,j;
+			for(j = 0; j < 4; j++){
+				switch(j){
+					case 0:
+						temp = (int)(qw * 10000000.0);
+						break;
+					case 1:
+						temp = (int)(qx * 10000000.0);
+						break;
+					case 2:
+						temp = (int)(qy * 10000000.0);
+						break;
+					case 3:
+						temp = (int)(qz * 10000000.0);
+						break;
+				}
+				for(i = 0; i < 4; i++){
+					string[i+(j*4)] = temp>>(8*i);
+				}
+			}
+			string[16] = ax>>8;
+			string[17] = ax;
+			string[18] = ay>>8;
+			string[19] = ay;
+			string[20] = az>>8;
+			string[21] = az;
+
+			MRF24J40_send(pString, 22, 0xAABB);
+			MRF24J40_receive();
+			//MRF24J40_send_string(pString,0xAABB);
+
+			//__enable_interrupts();
 		}
  	}
 	return 0;									// don't ever come near this
-}
-
-void init_timer()
-{
-	T1TC = 0; //maak de timer zelf 0
-	T1PC =0;// maak de prescaler zelf 0
-	T1MR0=200; 	//instellen waarde timer en prescaler
-	T1PR=60000; //Kloksnelheid
-	T1MCR = 0x0003;
-	T1EMR =0;// maak geen gebruik van  match acties..
-	T1CCR =0;// we laden geen capture waardes in
-	T1IR=1; // reset value interupt flag =1!!!
-}
-
-void TimerStartTwee(void){
-// deze routine start de timer..
-	T1TCR=0x01;
-}
-
-void TimerStopTwee(void){
-	T1TCR=0x00; // stop timer
-	T1TCR=0x10; // reset timer (moet nog in de interrupt routine voor ontvangst)
-}
-
-void TimerResetTwee(void)
-{
-	T1TC = 0;
-	T1IR=1;
 }
 
 void init_interrupt(void)
