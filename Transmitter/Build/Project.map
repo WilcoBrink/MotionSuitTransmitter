@@ -73,7 +73,7 @@ LOAD crt0.o
 startup
  *(.startup)
 
-.text           0x00000000     0x7320
+.text           0x00000000     0x7378
  *(EXCLUDE_FILE(*text.iwram*) .text)
  .text          0x00000000      0x190 crt0.o
                 0x00000000                _start
@@ -125,153 +125,152 @@ startup
  .text          0x000017b0      0x110 ./../Source/leds.o
                 0x000017b0                LED_init
                 0x0000180c                LED_put
- .text          0x000018c0      0x35c ./../Source/main.o
+ .text          0x000018c0      0x3b8 ./../Source/main.o
                 0x000018c0                main
-                0x00001a24                init_timer
-                0x00001abc                TimerStartTwee
-                0x00001ae0                TimerStopTwee
-                0x00001b10                TimerResetTwee
-                0x00001b44                init_interrupt
-                0x00001bd8                mpu6050_interrupt
- *fill*         0x00001c1c        0x4 
- .text          0x00001c20      0xff8 ./../Source/mpu6050.o
-                0x00001c20                mpu6050_init
-                0x00001cf0                mpu6050_setMemoryBank
-                0x00001d7c                mpu6050_setMemoryStartAddress
-                0x00001dc0                mpu6050_readMemoryBlock
-                0x00001f40                mpu6050_writeMemoryBlock
-                0x00002168                mpu6050_writeDMPConfigurationSet
-                0x00002450                mpu6050_getFIFOCount
-                0x000024dc                mpu6050_getFIFOBytes
-                0x00002528                mpu6050_getIntStatus
-                0x00002574                mpu6050_resetFIFO
-                0x000025ac                mpu6050_getXGyroOffset
-                0x00002600                mpu6050_setXGyroOffset
-                0x00002648                mpu6050_getYGyroOffset
-                0x0000269c                mpu6050_setYGyroOffset
-                0x000026e4                mpu6050_getZGyroOffset
-                0x00002738                mpu6050_setZGyroOffset
-                0x00002780                mpu6050_setSleepDisabled
-                0x000027b8                mpu6050_setSleepEnabled
-                0x000027f0                mpu6050_testConnection
-                0x00002858                mpu6050_getRawData
-                0x000029f0                mpu6050_getConvData
- .text          0x00002c18     0x110c ./../Source/mpu6050dmp.o
-                0x00002c18                mpu6050_dmpInitialize
-                0x000035dc                mpu6050_dmpEnable
-                0x00003614                mpu6050_dmpDisable
-                0x0000364c                mpu6050_getQuaternion
-                0x000037ec                mpu6050_getRollPitchYaw
-                0x00003ba8                mpu6050_getQuaternionWait
- .text          0x00003d24      0xca0 ./../Source/MRF24J40.o
-                0x00003d24                MRF24J40_init
-                0x00003f98                MRF24J40_send_byte
-                0x00003fd8                MRF24J40_send_string
-                0x00004044                MRF24J40_send
-                0x00004228                MRF24J40_receive
-                0x00004334                MRF24J40_interrupt
-                0x000046d8                MRF24J40_error
-                0x00004700                MRF24_Write_Short
-                0x00004738                MRF24_Read_Short
-                0x00004794                MRF24_Write_Long
-                0x000047c0                MRF24_Read_Long
-                0x000048f0                MRF24J40_sleep
-                0x0000491c                MRF24J40_wake
-                0x00004958                StringCopy
- .text          0x000049c4       0xc8 ./../Source/pll.o
-                0x000049c4                PLL_init
- .text          0x00004a8c      0x2f4 ./../Source/spi.o
-                0x00004a8c                SPI_init
-                0x00004b2c                SPI_set_8_bit
-                0x00004b70                SPI_set_12_bit
-                0x00004bb4                SPI_set_16_bit
-                0x00004bf8                SPI_set_low_speed
-                0x00004c38                SPI_set_high_speed
-                0x00004c78                SPI_get
-                0x00004d0c                SPI_put
- .text          0x00004d80      0x4b8 ./../Source/uart.o
-                0x00004d80                UART_init
-                0x00004e08                UART_put
-                0x00004ed4                UART_putchar
-                0x00004f24                UART_putbin
-                0x00004fec                UART_putint
-                0x00005014                UART_puthex
-                0x0000503c                UART_get
-                0x00005094                UART_get_unsigned
- .text          0x00005238      0x464 ./../Source/vic.o
-                0x00005238                VicSetup
-                0x00005614                DisableVectorInt
-                0x00005658                EnableVectorInt
- .text          0x0000569c      0x110 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
-                0x0000569c                asin
- .text          0x000057ac       0x10 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_atan2.o)
-                0x000057ac                atan2
- *fill*         0x000057bc        0x4 
- .text          0x000057c0      0x5f0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_asin.o)
-                0x000057c0                __ieee754_asin
- .text          0x00005db0      0x2f0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_atan2.o)
-                0x00005db0                __ieee754_atan2
- .text          0x000060a0      0x23c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_sqrt.o)
-                0x000060a0                __ieee754_sqrt
- *fill*         0x000062dc        0x4 
- .text          0x000062e0      0x490 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
-                0x000062e0                atan
- .text          0x00006770        0x8 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fabs.o)
-                0x00006770                fabs
- .text          0x00006778       0x6c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fpclassify.o)
-                0x00006778                __fpclassifyd
- .text          0x000067e4        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_lib_ver.o)
- .text          0x000067e4        0x8 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_matherr.o)
-                0x000067e4                matherr
- .text          0x000067ec       0x10 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_nan.o)
-                0x000067ec                nan
- .text          0x000067fc      0x114 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
-                0x000067fc                __aeabi_uidiv
-                0x000067fc                __udivsi3
-                0x000068f0                __aeabi_uidivmod
- .text          0x00006910        0x4 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
-                0x00006910                __aeabi_idiv0
-                0x00006910                __aeabi_ldiv0
- .text          0x00006914      0x41c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_addsubdf3.o)
-                0x00006914                __aeabi_drsub
-                0x0000691c                __aeabi_dsub
-                0x0000691c                __subdf3
-                0x00006920                __aeabi_dadd
-                0x00006920                __adddf3
-                0x00006c30                __floatunsidf
-                0x00006c30                __aeabi_ui2d
-                0x00006c54                __floatsidf
-                0x00006c54                __aeabi_i2d
-                0x00006c7c                __aeabi_f2d
-                0x00006c7c                __extendsfdf2
-                0x00006cbc                __floatundidf
-                0x00006cbc                __aeabi_ul2d
-                0x00006cd0                __floatdidf
-                0x00006cd0                __aeabi_l2d
- .text          0x00006d30      0x49c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_muldivdf3.o)
-                0x00006d30                __aeabi_dmul
-                0x00006d30                __muldf3
-                0x00006fc0                __divdf3
-                0x00006fc0                __aeabi_ddiv
- .text          0x000071cc      0x144 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_cmpdf2.o)
-                0x000071cc                __gtdf2
-                0x000071cc                __gedf2
-                0x000071d4                __ltdf2
-                0x000071d4                __ledf2
-                0x000071dc                __nedf2
-                0x000071dc                __eqdf2
-                0x000071dc                __cmpdf2
-                0x00007264                __aeabi_cdrcmple
-                0x00007280                __aeabi_cdcmpeq
-                0x00007280                __aeabi_cdcmple
-                0x00007298                __aeabi_dcmpeq
-                0x000072b0                __aeabi_dcmplt
-                0x000072c8                __aeabi_dcmple
-                0x000072e0                __aeabi_dcmpge
-                0x000072f8                __aeabi_dcmpgt
- .text          0x00007310       0x10 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
-                0x00007310                __errno
- .text          0x00007320        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
+                0x00001a80                init_timer
+                0x00001b18                TimerStartTwee
+                0x00001b3c                TimerStopTwee
+                0x00001b6c                TimerResetTwee
+                0x00001ba0                init_interrupt
+                0x00001c34                mpu6050_interrupt
+ .text          0x00001c78      0xff8 ./../Source/mpu6050.o
+                0x00001c78                mpu6050_init
+                0x00001d48                mpu6050_setMemoryBank
+                0x00001dd4                mpu6050_setMemoryStartAddress
+                0x00001e18                mpu6050_readMemoryBlock
+                0x00001f98                mpu6050_writeMemoryBlock
+                0x000021c0                mpu6050_writeDMPConfigurationSet
+                0x000024a8                mpu6050_getFIFOCount
+                0x00002534                mpu6050_getFIFOBytes
+                0x00002580                mpu6050_getIntStatus
+                0x000025cc                mpu6050_resetFIFO
+                0x00002604                mpu6050_getXGyroOffset
+                0x00002658                mpu6050_setXGyroOffset
+                0x000026a0                mpu6050_getYGyroOffset
+                0x000026f4                mpu6050_setYGyroOffset
+                0x0000273c                mpu6050_getZGyroOffset
+                0x00002790                mpu6050_setZGyroOffset
+                0x000027d8                mpu6050_setSleepDisabled
+                0x00002810                mpu6050_setSleepEnabled
+                0x00002848                mpu6050_testConnection
+                0x000028b0                mpu6050_getRawData
+                0x00002a48                mpu6050_getConvData
+ .text          0x00002c70     0x110c ./../Source/mpu6050dmp.o
+                0x00002c70                mpu6050_dmpInitialize
+                0x00003634                mpu6050_dmpEnable
+                0x0000366c                mpu6050_dmpDisable
+                0x000036a4                mpu6050_getQuaternion
+                0x00003844                mpu6050_getRollPitchYaw
+                0x00003c00                mpu6050_getQuaternionWait
+ .text          0x00003d7c      0xca0 ./../Source/MRF24J40.o
+                0x00003d7c                MRF24J40_init
+                0x00003ff0                MRF24J40_send_byte
+                0x00004030                MRF24J40_send_string
+                0x0000409c                MRF24J40_send
+                0x00004280                MRF24J40_receive
+                0x0000438c                MRF24J40_interrupt
+                0x00004730                MRF24J40_error
+                0x00004758                MRF24_Write_Short
+                0x00004790                MRF24_Read_Short
+                0x000047ec                MRF24_Write_Long
+                0x00004818                MRF24_Read_Long
+                0x00004948                MRF24J40_sleep
+                0x00004974                MRF24J40_wake
+                0x000049b0                StringCopy
+ .text          0x00004a1c       0xc8 ./../Source/pll.o
+                0x00004a1c                PLL_init
+ .text          0x00004ae4      0x2f4 ./../Source/spi.o
+                0x00004ae4                SPI_init
+                0x00004b84                SPI_set_8_bit
+                0x00004bc8                SPI_set_12_bit
+                0x00004c0c                SPI_set_16_bit
+                0x00004c50                SPI_set_low_speed
+                0x00004c90                SPI_set_high_speed
+                0x00004cd0                SPI_get
+                0x00004d64                SPI_put
+ .text          0x00004dd8      0x4b8 ./../Source/uart.o
+                0x00004dd8                UART_init
+                0x00004e60                UART_put
+                0x00004f2c                UART_putchar
+                0x00004f7c                UART_putbin
+                0x00005044                UART_putint
+                0x0000506c                UART_puthex
+                0x00005094                UART_get
+                0x000050ec                UART_get_unsigned
+ .text          0x00005290      0x464 ./../Source/vic.o
+                0x00005290                VicSetup
+                0x0000566c                DisableVectorInt
+                0x000056b0                EnableVectorInt
+ .text          0x000056f4      0x110 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
+                0x000056f4                asin
+ .text          0x00005804       0x10 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_atan2.o)
+                0x00005804                atan2
+ *fill*         0x00005814        0x4 
+ .text          0x00005818      0x5f0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_asin.o)
+                0x00005818                __ieee754_asin
+ .text          0x00005e08      0x2f0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_atan2.o)
+                0x00005e08                __ieee754_atan2
+ .text          0x000060f8      0x23c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_sqrt.o)
+                0x000060f8                __ieee754_sqrt
+ *fill*         0x00006334        0x4 
+ .text          0x00006338      0x490 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
+                0x00006338                atan
+ .text          0x000067c8        0x8 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fabs.o)
+                0x000067c8                fabs
+ .text          0x000067d0       0x6c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fpclassify.o)
+                0x000067d0                __fpclassifyd
+ .text          0x0000683c        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_lib_ver.o)
+ .text          0x0000683c        0x8 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_matherr.o)
+                0x0000683c                matherr
+ .text          0x00006844       0x10 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_nan.o)
+                0x00006844                nan
+ .text          0x00006854      0x114 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+                0x00006854                __aeabi_uidiv
+                0x00006854                __udivsi3
+                0x00006948                __aeabi_uidivmod
+ .text          0x00006968        0x4 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+                0x00006968                __aeabi_idiv0
+                0x00006968                __aeabi_ldiv0
+ .text          0x0000696c      0x41c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_addsubdf3.o)
+                0x0000696c                __aeabi_drsub
+                0x00006974                __aeabi_dsub
+                0x00006974                __subdf3
+                0x00006978                __aeabi_dadd
+                0x00006978                __adddf3
+                0x00006c88                __floatunsidf
+                0x00006c88                __aeabi_ui2d
+                0x00006cac                __floatsidf
+                0x00006cac                __aeabi_i2d
+                0x00006cd4                __aeabi_f2d
+                0x00006cd4                __extendsfdf2
+                0x00006d14                __floatundidf
+                0x00006d14                __aeabi_ul2d
+                0x00006d28                __floatdidf
+                0x00006d28                __aeabi_l2d
+ .text          0x00006d88      0x49c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_muldivdf3.o)
+                0x00006d88                __aeabi_dmul
+                0x00006d88                __muldf3
+                0x00007018                __divdf3
+                0x00007018                __aeabi_ddiv
+ .text          0x00007224      0x144 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_cmpdf2.o)
+                0x00007224                __gtdf2
+                0x00007224                __gedf2
+                0x0000722c                __ltdf2
+                0x0000722c                __ledf2
+                0x00007234                __nedf2
+                0x00007234                __eqdf2
+                0x00007234                __cmpdf2
+                0x000072bc                __aeabi_cdrcmple
+                0x000072d8                __aeabi_cdcmpeq
+                0x000072d8                __aeabi_cdcmple
+                0x000072f0                __aeabi_dcmpeq
+                0x00007308                __aeabi_dcmplt
+                0x00007320                __aeabi_dcmple
+                0x00007338                __aeabi_dcmpge
+                0x00007350                __aeabi_dcmpgt
+ .text          0x00007368       0x10 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
+                0x00007368                __errno
+ .text          0x00007378        0x0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
  *(.text.*)
  *(.stub)
  *(.gnu.warning)
@@ -279,46 +278,46 @@ startup
  *(.glue_7 .glue_7t)
  .glue_7        0x00000000        0x0 linker stubs
  .glue_7t       0x00000000        0x0 linker stubs
-                0x00007320                . = ALIGN (0x4)
+                0x00007378                . = ALIGN (0x4)
 
-.vfp11_veneer   0x00007320        0x0
+.vfp11_veneer   0x00007378        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x00007320        0x0
+.v4_bx          0x00007378        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x00007320        0x0
+.iplt           0x00007378        0x0
  .iplt          0x00000000        0x0 crt0.o
 
-.rodata         0x00007320      0x8d0
+.rodata         0x00007378      0x8d0
  *(.rodata)
- .rodata        0x00007320      0x87c ./../Source/mpu6050dmp.o
-                0x00007320                mpu6050_dmpMemory
-                0x00007aac                mpu6050_dmpConfig
-                0x00007b6c                mpu6050_dmpUpdates
- *fill*         0x00007b9c        0x4 
- .rodata        0x00007ba0       0x40 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
- .rodata        0x00007be0        0x4 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
-                0x00007be0                _global_impure_ptr
+ .rodata        0x00007378      0x87c ./../Source/mpu6050dmp.o
+                0x00007378                mpu6050_dmpMemory
+                0x00007b04                mpu6050_dmpConfig
+                0x00007bc4                mpu6050_dmpUpdates
+ *fill*         0x00007bf4        0x4 
+ .rodata        0x00007bf8       0x40 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
+ .rodata        0x00007c38        0x4 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
+                0x00007c38                _global_impure_ptr
  *all.rodata*(*)
  *(.roda)
  *(.rodata.*)
  .rodata.str1.4
-                0x00007be4        0x5 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
+                0x00007c3c        0x5 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
                                   0xc (size before relaxing)
- *fill*         0x00007be9        0x3 
+ *fill*         0x00007c41        0x3 
  .rodata.str1.4
-                0x00007bec        0x4 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
+                0x00007c44        0x4 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
  *(.gnu.linkonce.r*)
-                0x00007bf0                . = ALIGN (0x4)
-                0x00007bf0                __ro_end = .
+                0x00007c48                . = ALIGN (0x4)
+                0x00007c48                __ro_end = .
 
-.rel.dyn        0x00007bf0        0x0
+.rel.dyn        0x00007c48        0x0
  .rel.iplt      0x00000000        0x0 crt0.o
 
-.data           0x40000000      0x470 load address 0x00007bf0
+.data           0x40000000      0x470 load address 0x00007c48
                 0x40000000                __data_beg__ = .
-                0x00007bf0                __data_beg_src__ = __ro_end
+                0x00007c48                __data_beg_src__ = __ro_end
  *(.data)
  .data          0x40000000        0x0 crt0.o
  .data          0x40000000        0x0 ./../Source/delay.o
@@ -363,10 +362,10 @@ startup
                 0x40000470                __data_end__ = .
                 0x40000470                __data_end = .
 
-.igot.plt       0x40000470        0x0 load address 0x00008060
+.igot.plt       0x40000470        0x0 load address 0x000080b8
  .igot.plt      0x00000000        0x0 crt0.o
 
-.bss            0x40000470       0xfc load address 0x00008060
+.bss            0x40000470       0xfc load address 0x000080b8
                 0x40000470                __bss_start = .
                 0x40000470                __bss_beg__ = .
  *(.bss)
@@ -543,38 +542,38 @@ OUTPUT(./../Build/Project.elf elf32-littlearm)
  .comment       0x00000000       0x12 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
  .comment       0x00000000       0x12 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
 
-.debug_info     0x00000000     0x4926
+.debug_info     0x00000000     0x497a
  .debug_info    0x00000000       0xcd ./../Source/delay.o
  .debug_info    0x000000cd      0x52c ./../Source/I2C.o
  .debug_info    0x000005f9       0xa0 ./../Source/keys.o
  .debug_info    0x00000699      0x271 ./../Source/lcd.o
  .debug_info    0x0000090a       0x78 ./../Source/leds.o
- .debug_info    0x00000982      0x19e ./../Source/main.o
- .debug_info    0x00000b20      0x7b9 ./../Source/mpu6050.o
- .debug_info    0x000012d9      0x40d ./../Source/mpu6050dmp.o
- .debug_info    0x000016e6      0x4dd ./../Source/MRF24J40.o
- .debug_info    0x00001bc3       0x3c ./../Source/pll.o
- .debug_info    0x00001bff      0x136 ./../Source/spi.o
- .debug_info    0x00001d35      0x242 ./../Source/uart.o
- .debug_info    0x00001f77       0xd9 ./../Source/vic.o
- .debug_info    0x00002050      0x281 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
- .debug_info    0x000022d1      0x107 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_atan2.o)
- .debug_info    0x000023d8      0x368 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_asin.o)
- .debug_info    0x00002740      0x2d0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_atan2.o)
- .debug_info    0x00002a10      0x23a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_sqrt.o)
- .debug_info    0x00002c4a      0x25a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
- .debug_info    0x00002ea4      0x13a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fabs.o)
- .debug_info    0x00002fde       0xdf c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fpclassify.o)
- .debug_info    0x000030bd       0xc0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_lib_ver.o)
- .debug_info    0x0000317d      0x139 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_matherr.o)
- .debug_info    0x000032b6       0xd5 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_nan.o)
- .debug_info    0x0000338b       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
- .debug_info    0x0000341c       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
- .debug_info    0x000034ad       0x92 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_addsubdf3.o)
- .debug_info    0x0000353f       0x92 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_muldivdf3.o)
- .debug_info    0x000035d1       0x92 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_cmpdf2.o)
- .debug_info    0x00003663      0x95e c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
- .debug_info    0x00003fc1      0x965 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
+ .debug_info    0x00000982      0x1f2 ./../Source/main.o
+ .debug_info    0x00000b74      0x7b9 ./../Source/mpu6050.o
+ .debug_info    0x0000132d      0x40d ./../Source/mpu6050dmp.o
+ .debug_info    0x0000173a      0x4dd ./../Source/MRF24J40.o
+ .debug_info    0x00001c17       0x3c ./../Source/pll.o
+ .debug_info    0x00001c53      0x136 ./../Source/spi.o
+ .debug_info    0x00001d89      0x242 ./../Source/uart.o
+ .debug_info    0x00001fcb       0xd9 ./../Source/vic.o
+ .debug_info    0x000020a4      0x281 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
+ .debug_info    0x00002325      0x107 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_atan2.o)
+ .debug_info    0x0000242c      0x368 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_asin.o)
+ .debug_info    0x00002794      0x2d0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_atan2.o)
+ .debug_info    0x00002a64      0x23a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_sqrt.o)
+ .debug_info    0x00002c9e      0x25a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
+ .debug_info    0x00002ef8      0x13a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fabs.o)
+ .debug_info    0x00003032       0xdf c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fpclassify.o)
+ .debug_info    0x00003111       0xc0 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_lib_ver.o)
+ .debug_info    0x000031d1      0x139 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_matherr.o)
+ .debug_info    0x0000330a       0xd5 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_nan.o)
+ .debug_info    0x000033df       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+ .debug_info    0x00003470       0x91 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+ .debug_info    0x00003501       0x92 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_addsubdf3.o)
+ .debug_info    0x00003593       0x92 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_muldivdf3.o)
+ .debug_info    0x00003625       0x92 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_cmpdf2.o)
+ .debug_info    0x000036b7      0x95e c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
+ .debug_info    0x00004015      0x965 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
 
 .debug_abbrev   0x00000000     0x16ac
  .debug_abbrev  0x00000000       0x76 ./../Source/delay.o
@@ -697,38 +696,38 @@ OUTPUT(./../Build/Project.elf elf32-littlearm)
  .debug_aranges
                 0x000003b8       0x18 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
 
-.debug_line     0x00000000     0x1f94
+.debug_line     0x00000000     0x1f98
  .debug_line    0x00000000       0x82 ./../Source/delay.o
  .debug_line    0x00000082      0x1e1 ./../Source/I2C.o
  .debug_line    0x00000263       0xb1 ./../Source/keys.o
  .debug_line    0x00000314       0xc4 ./../Source/lcd.o
  .debug_line    0x000003d8       0x5a ./../Source/leds.o
- .debug_line    0x00000432       0xa2 ./../Source/main.o
- .debug_line    0x000004d4      0x19d ./../Source/mpu6050.o
- .debug_line    0x00000671      0x19c ./../Source/mpu6050dmp.o
- .debug_line    0x0000080d      0x1aa ./../Source/MRF24J40.o
- .debug_line    0x000009b7       0x52 ./../Source/pll.o
- .debug_line    0x00000a09       0x87 ./../Source/spi.o
- .debug_line    0x00000a90       0xc8 ./../Source/uart.o
- .debug_line    0x00000b58       0x85 ./../Source/vic.o
- .debug_line    0x00000bdd      0x15b c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
- .debug_line    0x00000d38       0xf3 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_atan2.o)
- .debug_line    0x00000e2b      0x1a1 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_asin.o)
- .debug_line    0x00000fcc      0x1b8 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_atan2.o)
- .debug_line    0x00001184      0x194 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_sqrt.o)
- .debug_line    0x00001318      0x19c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
- .debug_line    0x000014b4      0x149 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fabs.o)
- .debug_line    0x000015fd      0x11a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fpclassify.o)
- .debug_line    0x00001717       0x62 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_lib_ver.o)
- .debug_line    0x00001779       0xb2 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_matherr.o)
- .debug_line    0x0000182b       0xad c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_nan.o)
- .debug_line    0x000018d8       0x8a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
- .debug_line    0x00001962       0x61 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
- .debug_line    0x000019c3      0x168 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_addsubdf3.o)
- .debug_line    0x00001b2b      0x180 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_muldivdf3.o)
- .debug_line    0x00001cab       0xae c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_cmpdf2.o)
- .debug_line    0x00001d59      0x12b c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
- .debug_line    0x00001e84      0x110 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
+ .debug_line    0x00000432       0xa6 ./../Source/main.o
+ .debug_line    0x000004d8      0x19d ./../Source/mpu6050.o
+ .debug_line    0x00000675      0x19c ./../Source/mpu6050dmp.o
+ .debug_line    0x00000811      0x1aa ./../Source/MRF24J40.o
+ .debug_line    0x000009bb       0x52 ./../Source/pll.o
+ .debug_line    0x00000a0d       0x87 ./../Source/spi.o
+ .debug_line    0x00000a94       0xc8 ./../Source/uart.o
+ .debug_line    0x00000b5c       0x85 ./../Source/vic.o
+ .debug_line    0x00000be1      0x15b c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_asin.o)
+ .debug_line    0x00000d3c       0xf3 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-w_atan2.o)
+ .debug_line    0x00000e2f      0x1a1 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_asin.o)
+ .debug_line    0x00000fd0      0x1b8 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_atan2.o)
+ .debug_line    0x00001188      0x194 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-e_sqrt.o)
+ .debug_line    0x0000131c      0x19c c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_atan.o)
+ .debug_line    0x000014b8      0x149 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fabs.o)
+ .debug_line    0x00001601      0x11a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_fpclassify.o)
+ .debug_line    0x0000171b       0x62 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_lib_ver.o)
+ .debug_line    0x0000177d       0xb2 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_matherr.o)
+ .debug_line    0x0000182f       0xad c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libm.a(lib_a-s_nan.o)
+ .debug_line    0x000018dc       0x8a c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_udivsi3.o)
+ .debug_line    0x00001966       0x61 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_dvmd_tls.o)
+ .debug_line    0x000019c7      0x168 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_addsubdf3.o)
+ .debug_line    0x00001b2f      0x180 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_muldivdf3.o)
+ .debug_line    0x00001caf       0xae c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2\libgcc.a(_arm_cmpdf2.o)
+ .debug_line    0x00001d5d      0x12b c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-errno.o)
+ .debug_line    0x00001e88      0x110 c:/hu_armdevenv/dev_tools/yagarto/bin/../lib/gcc/arm-none-eabi/4.7.2/../../../../arm-none-eabi/lib\libg.a(lib_a-impure.o)
 
 .debug_str      0x00000000     0x14c0
  .debug_str     0x00000000       0x79 ./../Source/delay.o

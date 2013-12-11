@@ -42,6 +42,13 @@ extern int main(void)
 	double pitch = 0.0f;
 	double yaw = 0.0f;
 
+	short ax = 0;
+	short ay = 0;
+	short az = 0;
+	short gx = 0;
+	short gy = 0;
+	short gz = 0;
+
 	/*char string[25];
 	char *pString;
 	pString=&string[0];*/
@@ -73,6 +80,7 @@ extern int main(void)
 		if(mpu6050_getQuaternionWait(0x68, &qw, &qx, &qy, &qz)) {
 			__disable_interrupts();
 			mpu6050_getRollPitchYaw(qw, qx, qy, qz, &roll, &pitch, &yaw);
+			mpu6050_getRawData(0x68, &ax, &ay, &az, &gx, &gy, &gz);
 			//UART_putint((int)qw*1000);
 			//UART_putint((int)qx*1000);
 			//UART_putint((int)qy*1000);
@@ -85,63 +93,6 @@ extern int main(void)
 			//UART_put("/n");
 			__enable_interrupts();
 		}
-
-		/*string[0] = read_byte(0x68, MPU6050_ACCEL_XOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[1] = read_byte(0x68, MPU6050_ACCEL_XOUT_L);
-		//delay_ms(50);
-		string[2] = read_byte(0x68, MPU6050_ACCEL_YOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[3] = read_byte(0x68, MPU6050_ACCEL_YOUT_L);
-		//delay_ms(50);
-		string[4] = read_byte(0x68, MPU6050_ACCEL_ZOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[5] = read_byte(0x68, MPU6050_ACCEL_ZOUT_L);
-		//delay_ms(50);
-		string[6] = read_byte(0x68, MPU6050_GYRO_XOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[7] = read_byte(0x68, MPU6050_GYRO_XOUT_L);
-		//delay_ms(50);
-		string[8] = read_byte(0x68, MPU6050_GYRO_YOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[9] = read_byte(0x68, MPU6050_GYRO_YOUT_L);
-		//delay_ms(50);
-		string[10] = read_byte(0x68, MPU6050_GYRO_ZOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[11] = read_byte(0x68, MPU6050_GYRO_ZOUT_L);
-
-		string[12] = read_byte(0x69, MPU6050_ACCEL_XOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[13] = read_byte(0x69, MPU6050_ACCEL_XOUT_L);
-		//delay_ms(50);
-		string[14] = read_byte(0x69, MPU6050_ACCEL_YOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[15] = read_byte(0x69, MPU6050_ACCEL_YOUT_L);
-		//delay_ms(50);
-		string[16] = read_byte(0x69, MPU6050_ACCEL_ZOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[17] = read_byte(0x69, MPU6050_ACCEL_ZOUT_L);
-		//delay_ms(50);
-		string[18] = read_byte(0x69, MPU6050_GYRO_XOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[19] = read_byte(0x69, MPU6050_GYRO_XOUT_L);
-		//delay_ms(50);
-		string[20] = read_byte(0x69, MPU6050_GYRO_YOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[21] = read_byte(0x69, MPU6050_GYRO_YOUT_L);
-		//delay_ms(50);
-		string[22] = read_byte(0x69, MPU6050_GYRO_ZOUT_H);		// Accelerometer x_as uitlezen
-		//delay_ms(50);
-		string[23] = read_byte(0x69, MPU6050_GYRO_ZOUT_L);
-
-		//string[0], string[2], string[4], string[6], string[8], string[10] = 0x30;
-		//string[1], string[3], string[5], string[7], string[9], string[11] = 0x39;
-		if (T1IR==1)
-		{
-			TimerResetTwee();
-		MRF24J40_send_string(pString,0xAABB);
-		// gaat dit wel goed?
-		}*/
  	}
 	return 0;									// don't ever come near this
 }
