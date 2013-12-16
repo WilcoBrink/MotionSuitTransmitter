@@ -16,7 +16,7 @@ References:
 #include "mpu6050registers.h"
 
 //defines to replace variables
-#define SMPLRT_DIV 0x9F		// 50 Hz
+#define SMPLRT_DIV 0x07		// 0x9F is 50 Hz
 
 //i2c settings
 #define MPU6050_I2CINIT 0 //init i2c
