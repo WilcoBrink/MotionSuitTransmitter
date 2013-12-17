@@ -234,10 +234,19 @@ void mpu6050_dmpDisable(char address) {
  */
 void mpu6050_getQuaternion(const unsigned char* packet, double *qw, double *qx, double *qy, double *qz) {
 	if (packet == 0) packet = dmpPacketBuffer;
-    *qw = (double)((packet[0] << 8) + packet[1]) / 16384.0f;
-    *qx = (double)((packet[4] << 8) + packet[5]) / 16384.0f;
-    *qy = (double)((packet[8] << 8) + packet[9]) / 16384.0f;
-    *qz = (double)((packet[12] << 8) + packet[13]) / 16384.0f;
+	char packetCopy[14];
+	int i;
+	for(i = 0; i<14;i++) {
+	packetCopy[i] = packet[i];
+	}
+    short temp = (short)((packetCopy[0] << 8) + packetCopy[1]); /// 16384.0f;
+    *qw = temp / 16384.0f;
+    temp = (short)((packetCopy[4] << 8) + packetCopy[5]); /// 16384.0f;
+    *qx = temp/16384.0f;
+    temp = (short)((packetCopy[8] << 8) + packetCopy[9]); /// 16384.0f;
+    *qy = temp/16384.0f;
+    temp = (short)((packetCopy[12] << 8) + packetCopy[13]); /// 16384.0f;
+    *qz = temp/16384.0f;
 }
 
 /*
