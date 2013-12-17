@@ -34,9 +34,6 @@ extern int main(void)
 	double qx = 0.0f;
 	double qy = 0.0f;
 	double qz = 0.0f;
-	double roll = 0.0f;
-	double pitch = 0.0f;
-	double yaw = 0.0f;
 
 	short ax = 0;
 	short ay = 0;
@@ -53,16 +50,12 @@ extern int main(void)
 	/*   init libs   */
 	PLL_init();
 	SPI_init(0x0F);
-	//LED_init();
-	//InitKeys();
 	i2cInit();
 	UART_init();
 	MRF24J40_init(0xABBA);
 	MRF24J40_wake();
 	delay_s(2);
-	
 	init_interrupt();
-
 	mpu6050_init(0x68);
 	mpu6050_dmpInitialize(0x68);
 	mpu6050_dmpEnable(0x68);
@@ -73,9 +66,7 @@ extern int main(void)
 	while(1)
  	{
 		if(mpu6050_getQuaternionWait(0x68, &qw, &qx, &qy, &qz)) {
-			//__disable_interrupts();
 			mpu6050_getRawData(0x68, &ax, &ay, &az, &gx, &gy, &gz);
-			mpu6050_getRollPitchYaw(qw, qx, qy, qz, &roll, &pitch, &yaw);
 
 			int i,j;
 			for(j = 0; j < 4; j++){
@@ -107,8 +98,6 @@ extern int main(void)
 			MRF24J40_send(pString, 22, 0xAABB);
 			MRF24J40_receive();
 			//MRF24J40_send_string(pString,0xAABB);
-
-			//__enable_interrupts();
 		}
 		delay_ms(20);
  	}
