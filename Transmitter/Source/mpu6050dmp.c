@@ -68,10 +68,10 @@ unsigned char mpu6050_dmpInitialize(unsigned char address) {
 
     //load DMP code into memory banks
     if (mpu6050_writeMemoryBlock(address, mpu6050_dmpMemory, MPU6050_DMP_CODE_SIZE, 0, 0, 0, 0) == 1) {
-    	unsigned char verifyBuffer[138];
-    	mpu6050_setMemoryBank(address, 7, 0, 0);
-    	mpu6050_setMemoryStartAddress(address, 0);
-    	i2cRead(address, MPU6050_MEM_R_W, verifyBuffer, 138);
+    	//unsigned char verifyBuffer[137];
+    	//mpu6050_setMemoryBank(address, 7, 0, 0);
+    	//mpu6050_setMemoryStartAddress(address, 0);
+    	//i2cRead(address, MPU6050_MEM_R_W, verifyBuffer, 137);
         if (mpu6050_writeDMPConfigurationSet(address, mpu6050_dmpConfig, MPU6050_DMP_CONFIG_SIZE, 0)) {
         	//enable FIFO
         	i2cWriteBit(address, MPU6050_USER_CTRL, MPU6050_USERCTRL_FIFO_EN_BIT, 1);
@@ -108,16 +108,16 @@ unsigned char mpu6050_dmpInitialize(unsigned char address) {
             //set X/Y/Z gyro offsets to previous values
             //xgOffset = 0;
             //ygOffset = 0;
-            zgOffset = 90;
+            //zgOffset = 90;
 
             mpu6050_setXGyroOffset(address, xgOffset);
             mpu6050_setYGyroOffset(address, ygOffset);
             mpu6050_setZGyroOffset(address, zgOffset);
 
             //set X/Y/Z gyro user offsets to zero
-            i2cWrite(address, MPU6050_XG_OFFS_USRH, 0, 2);
-            i2cWrite(address, MPU6050_YG_OFFS_USRH, 0, 2);
-            i2cWrite(address, MPU6050_ZG_OFFS_USRH, 0, 2);
+            //i2cWrite(address, MPU6050_XG_OFFS_USRH, 0, 2);
+            //i2cWrite(address, MPU6050_YG_OFFS_USRH, 0, 2);
+            //i2cWrite(address, MPU6050_ZG_OFFS_USRH, 0, 2);
 
             //writing final memory update 1/7 (function unknown)
             unsigned char dmpUpdate[16], j;

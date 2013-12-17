@@ -110,6 +110,7 @@ extern int main(void)
 
 			//__enable_interrupts();
 		}
+		delay_ms(20);
  	}
 	return 0;									// don't ever come near this
 }
