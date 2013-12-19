@@ -68,6 +68,7 @@ signed char i2cStop(void);
 signed char i2cPutChar(unsigned char data);
 signed char i2cGetChar(unsigned char  mode, unsigned char* pData);
 signed char i2cWrite(unsigned char addr, unsigned char reg, unsigned char* pData, unsigned short length);
+signed char i2cWriteWord(unsigned char addr, unsigned char reg, signed short* pData);
 void i2cWriteBits(unsigned char addr, unsigned char reg, unsigned char bitStart, unsigned char length, unsigned char data);
 void i2cWriteBit(unsigned char addr, unsigned char reg, unsigned char bitNum, unsigned char data);
 signed char i2cWaitTransmit(void);

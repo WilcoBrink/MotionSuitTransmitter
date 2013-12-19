@@ -39,6 +39,45 @@ void mpu6050_init(char address)
     mpu6050_setSleepDisabled(address);
 }
 
+void mpu6050_calibrate(char address)
+{
+	short ax = 0;
+	short ay = 0;
+	short az = 0;
+	short gx = 0;
+	short gy = 0;
+	short gz = 0;
+	int axs = 0;
+	int ays = 0;
+	int azs = 0;
+	int gxs = 0;
+	int gys = 0;
+	int gzs = 0;
+	short axOffset = 0;
+	short ayOffset = 0;
+	short azOffset = 0;
+	short gxOffset = 0;
+	short gyOffset = 0;
+	short gzOffset = 0;
+
+	int i;
+	for(i = 0; i < 20; i++) {
+		mpu6050_getRawData(address, &ax, &ay, &az, &gx, &gy, &gz);
+		axs += ax; ays += ay; azs += az, gxs += gx, gys += gy, gzs += gz;
+	}
+	axOffset = axs/20; ayOffset = ays/20; azOffset = azs/20; gxOffset = gxs/20; gyOffset = gys/20; gzOffset = gzs/20;
+	azOffset -= 16384;
+	ayOffset = 0xFFFF;
+	i2cWriteWord(address, MPU6050_XA_OFFS_H, &axOffset);
+	unsigned char read_h, read_l;	i2cRead(address, MPU6050_XA_OFFS_H, &read_h, 1);
+	i2cRead(address, MPU6050_XA_OFFS_L_TC, &read_l, 1);
+	i2cWriteWord(address, MPU6050_YA_OFFS_H, &ayOffset);
+	i2cWriteWord(address, MPU6050_ZA_OFFS_H, &azOffset);
+	i2cWriteWord(address, MPU6050_XG_OFFS_USRH, &gxOffset);
+	i2cWriteWord(address, MPU6050_YG_OFFS_USRH, &gyOffset);
+	i2cWriteWord(address, MPU6050_ZG_OFFS_USRH, &gzOffset);
+}
+
 #if MPU6050_GETATTITUDE == 2
 /*
  * set a chip memory bank

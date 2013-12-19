@@ -9,7 +9,7 @@
 	#include "LPC214x.h"
 	#include "config.h"
 	
-	static void UART_putnum(unsigned int num, unsigned char deel);
+	static void UART_putnum(unsigned int num, unsigned char deel, char teken);
 	
 	// Stelt gebruikte I/O pinnen en baudrate in.
 	void UART_init(void)
@@ -95,9 +95,20 @@
 	
 	
 	// Stuurt meegegeven getal uit op de UART
-	void UART_putint(unsigned int num)
+	void UART_putint(int num)
 	{
-	    UART_putnum(num, 10);
+		unsigned int i;
+		char teken=0;
+		if (num<0)
+		{
+			i=~num+1;
+			teken=1;
+		}
+		else {
+			i=num;
+		}
+
+		UART_putnum(i, 10,teken);
 	}
 		
 	// Stuurt meegegeven waarde hexdecimaal uit op de UART
@@ -107,7 +118,7 @@
 	    #if 0
 	    UART_put("0x");
 	    #endif
-	    UART_putnum(num, 16);
+	    UART_putnum(num, 16, 0);
 	}
 	
 	// Ontvang ? karakter via de UART
@@ -129,40 +140,48 @@
 	}
 	
 	// Stuurt meegegeven getal uit op de UART in het aangegeven getallenstelsel
-	static void UART_putnum(unsigned int num, unsigned char deel)
+	static void UART_putnum(unsigned int num, unsigned char deel, char teken)
 	{
-	    static unsigned char chars[16] = "0123456789ABCDEF";
-	    unsigned int rest;
-	    signed char c[16];
-	    signed int i=15;
-	
-	    // Zet de integer om naar een string
-	    if(num==0) 
-	    {
-	        c[i]='0';
-	        i--;
-	    }
-	    else 
-	    {
-	        while(num>0) 
-	        {
-	            rest=num%deel;
-	            num/=deel;
-	            c[i]=chars[rest];
-	            i--;
-	
-	            if(i==0) // it ends here
-	                num=0;
-	        }
-	    }
-	
-	    // Wacht tot de buffer leeg is
-	    while(!(U0LSR & (1<<6)));
-	
-	    // Stuur de string uit
-	    while(i<15) 
-	    {
-	        i++;
-	        U0THR=c[i];
-	    }
-	}
+		    static unsigned char chars[17] = "0123456789ABCDEF";
+		    unsigned int rest;
+		    signed char c[16];
+		    signed int i=15;
+		    // Zet de integer om naar een string
+		    if(num==0)
+		    {
+		        c[i]='0';
+		        i--;
+		    }
+
+
+		    else
+		    {
+
+		    	while(num>0)
+		        {
+
+		            rest=num%deel;
+		            num/=deel;
+		            c[i]=chars[rest];
+		            i--;
+
+		            if(i==0) // it ends here
+		                num=0;
+		        }
+
+	        	if (teken==1){
+	        		c[i]='-';
+	        		i--;
+	        	}
+		    }
+
+		    // Wacht tot de buffer leeg is
+		    while(!(U0LSR & (1<<6)));
+
+		    // Stuur de string uit
+		    while(i<15)
+		    {
+		        i++;
+		        U0THR=c[i];
+		    }
+		}

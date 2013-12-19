@@ -236,7 +236,7 @@ void mpu6050_getQuaternion(const unsigned char* packet, double *qw, double *qx, 
 	if (packet == 0) packet = dmpPacketBuffer;
 	char packetCopy[14];
 	int i;
-	for(i = 0; i<14;i++) {
+	for(i = 0; i<14; i++) {
 	packetCopy[i] = packet[i];
 	}
     short temp = (short)((packetCopy[0] << 8) + packetCopy[1]); /// 16384.0f;
@@ -247,6 +247,29 @@ void mpu6050_getQuaternion(const unsigned char* packet, double *qw, double *qx, 
     *qy = temp/16384.0f;
     temp = (short)((packetCopy[12] << 8) + packetCopy[13]); /// 16384.0f;
     *qz = temp/16384.0f;
+}
+
+/*
+ * get acceleration from packet
+ */
+void mpu6050_getQuaternionAcceleration(const unsigned char* packet, double *qw, double *qx, double *qy, double *qz, short *ax, short *ay, short *az) {
+	if (packet == 0) packet = dmpPacketBuffer;
+	char packetCopy[37]; //we need bytes 28 29 32 33 36 37
+	int i;
+	for(i = 0; i<37; i++) {
+		packetCopy[i] = packet[i];
+	}
+	short temp = (short)((packetCopy[0] << 8) + packetCopy[1]); /// 16384.0f;
+	*qw = temp / 16384.0f;
+	temp = (short)((packetCopy[4] << 8) + packetCopy[5]); /// 16384.0f;
+	*qx = temp/16384.0f;
+	temp = (short)((packetCopy[8] << 8) + packetCopy[9]); /// 16384.0f;
+	*qy = temp/16384.0f;
+	temp = (short)((packetCopy[12] << 8) + packetCopy[13]); /// 16384.0f;
+	*qz = temp/16384.0f;
+	*ax = (short)((packetCopy[28] << 8) + packetCopy[29]);
+	*ay = (short)((packetCopy[32] << 8) + packetCopy[33]);
+	*az = (short)((packetCopy[36] << 8) + packetCopy[37]);
 }
 
 /*
@@ -285,6 +308,32 @@ unsigned char mpu6050_getQuaternionWait(char address, double *qw, double *qx, do
 		mpu6050_fifoCount -= MPU6050_DMP_dmpPacketSize;
 		//get quaternion
 		mpu6050_getQuaternion(mpu6050_fifoBuffer, qw, qx, qy, qz);
+		return 1;
+	}
+
+	return 0;
+}
+
+unsigned char mpu6050_getQuaternionAccelerationWait(char address, double *qw, double *qx, double *qy, double *qz, short *ax, short *ay, short *az) {
+	while (!mpu6050_mpuInterrupt && mpu6050_fifoCount < MPU6050_DMP_dmpPacketSize);
+	//reset interrupt
+	mpu6050_mpuInterrupt = 0;
+
+	//check for overflow
+	mpu6050_mpuIntStatus = mpu6050_getIntStatus(address);
+	mpu6050_fifoCount = mpu6050_getFIFOCount(address);
+	if ((mpu6050_mpuIntStatus & 0x10) || mpu6050_fifoCount == 1024) {
+		//reset
+		mpu6050_resetFIFO(address);
+	} else if (mpu6050_mpuIntStatus & 0x02) {
+		//wait for correct available data length, should be a VERY short wait
+		while (mpu6050_fifoCount < MPU6050_DMP_dmpPacketSize)
+			mpu6050_fifoCount = mpu6050_getFIFOCount(address);
+		//read a packet from FIFO
+		mpu6050_getFIFOBytes(address, mpu6050_fifoBuffer, MPU6050_DMP_dmpPacketSize);
+		mpu6050_fifoCount -= MPU6050_DMP_dmpPacketSize;
+		//get quaternion and acceleration
+		mpu6050_getQuaternionAcceleration(mpu6050_fifoBuffer, qw, qx, qy, qz, ax, ay, az);
 		return 1;
 	}
 

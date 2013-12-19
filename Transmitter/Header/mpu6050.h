@@ -105,6 +105,7 @@ extern volatile unsigned char mpu6050_mpuInterrupt;
 
 //functions
 void mpu6050_init(char address);
+void mpu6050_calibrate(char address);
 extern unsigned char mpu6050_testConnection(char address);
 
 extern void mpu6050_getRawData(char address, short* ax, short* ay, short* az, short* gx, short* gy, short* gz);
@@ -140,6 +141,8 @@ extern unsigned char mpu6050_dmpInitialize(unsigned char address);
 extern void mpu6050_dmpEnable(char address);
 extern void mpu6050_dmpDisable(char address);
 extern void mpu6050_getQuaternion(const unsigned char* packet, double *qw, double *qx, double *qy, double *qz);
+extern void mpu6050_getQuaternionAcceleration(const unsigned char* packet, double *qw, double *qx, double *qy, double *qz, short *ax, short *ay, short *az);
 extern void mpu6050_getRollPitchYaw(double qw, double qx, double qy, double qz, double *roll, double *pitch, double *yaw);
 extern unsigned char mpu6050_getQuaternionWait(char address, double *qw, double *qx, double *qy, double *qz);
+unsigned char mpu6050_getQuaternionAccelerationWait(char address, double *qw, double *qx, double *qy, double *qz, short *ax, short *ay, short *az);
 #endif

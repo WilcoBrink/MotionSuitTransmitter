@@ -19,6 +19,8 @@
 #include "vic.h"
 #include "math.h"
 
+#define USE_UART 1
+
 extern	char Received_Dataext[42];
 void init_interrupt(void);
 void mpu6050_interrupt(void);
@@ -42,6 +44,11 @@ extern int main(void)
 	short gy = 0;
 	short gz = 0;
 
+	#if USE_UART == 1
+	int sendQ[4];
+	unsigned short sendA[3];
+	#endif
+
 	int temp = 0;
 	char string[23];
 	string[23] = '\0';
@@ -50,6 +57,9 @@ extern int main(void)
 	/*   init libs   */
 	PLL_init();
 	SPI_init(0x0F);
+	#if USE_UART == 1
+	UART_init();
+	#endif
 	i2cInit();
 	UART_init();
 	MRF24J40_init(0xABBA);
@@ -58,6 +68,7 @@ extern int main(void)
 	init_interrupt();
 	mpu6050_init(0x68);
 	mpu6050_dmpInitialize(0x68);
+	//mpu6050_calibrate(0x68);
 	mpu6050_dmpEnable(0x68);
 	delay_ms(10);
 	__enable_interrupts();
@@ -95,9 +106,32 @@ extern int main(void)
 			string[20] = az>>8;
 			string[21] = az;
 
+			#if USE_UART == 1
+			sendQ[0] = (int)(qw * 10000000.0);
+			sendQ[1] = (int)(qx * 10000000.0);
+			sendQ[2] = (int)(qy * 10000000.0);
+			sendQ[3] = (int)(qz * 10000000.0);
+			sendA[0] = ax;
+			sendA[1] = ay;
+			sendA[2] = az;
+
+			for (i=0;i<4;i++)			// Loop to send the 6 sensor values to the computer
+			{
+				UART_putint(sendQ[i]);
+				UART_put(",");			// Comma used as split token in Processing
+			}
+			for (i=0;i<3;i++)			// Loop to send the 6 sensor values to the computer
+			{
+				UART_putint(sendA[i]);
+				UART_put(",");			// Comma used as split token in Processing
+			}
+			UART_put("\n");				// New line used by Processing to recognize end of transmission
+			#endif
+
+			#if USE_UART != 1
 			MRF24J40_send(pString, 22, 0xAABB);
 			MRF24J40_receive();
-			//MRF24J40_send_string(pString,0xAABB);
+			#endif
 		}
 		delay_ms(20);
  	}

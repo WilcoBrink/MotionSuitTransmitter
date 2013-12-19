@@ -365,6 +365,148 @@ signed char i2cWrite(unsigned char addr, unsigned char reg, unsigned char* pData
 
 /******************************************************************************
  * Description:
+ *    Sends data on the I2C network
+ *
+ *    Note: After this function is run, you may need a bus free time before a
+ *          new data transfer can be initiated.
+ *
+ * Params:
+ *    [in] addr  - address
+ *    [in] reg	 - register to write
+ *    [in] pData - data to transmit
+ *
+ * Returns:
+ *    I2C_CODE_OK    - successful
+ *    I2C_CODE_ERROR - an error occured
+ *****************************************************************************/
+signed char i2cWriteWord(unsigned char addr, unsigned char reg, signed short* pData)
+{
+  signed char retCode = 0;
+  unsigned char status = 0;
+
+  /* generate Start condition */
+  retCode = i2cStart();
+
+  /* Transmit address */
+  if(retCode == I2C_CODE_OK)
+  {
+    /* write SLA+W */
+    retCode = i2cPutChar(addr<<1);
+    while(retCode == I2C_CODE_BUSY)
+    {
+      retCode = i2cPutChar(addr<<1);
+    }
+  }
+
+  /* Transmit register */
+  if(retCode == I2C_CODE_OK)
+  {
+	  /* write SLA+W */
+      retCode = i2cPutChar(reg);
+      while(retCode == I2C_CODE_BUSY)
+      {
+        retCode = i2cPutChar(reg);
+      }
+  }
+
+  if(retCode == I2C_CODE_OK)
+  {
+      /* wait until data transmitted */
+      while(1)
+      {
+        /* get new status */
+        status = i2cCheckStatus();
+
+        /*
+         * SLA+W transmitted, ACK received or
+         * data byte transmitted, ACK received
+         */
+        if( (status == 0x18) || (status == 0x28) )
+        {
+          /* Data transmitted and ACK received */
+
+          /* write data */
+          retCode = i2cPutChar((char)(*pData >> 8));
+          while(retCode == I2C_CODE_BUSY)
+          {
+            retCode = i2cPutChar((char)*pData >> 8);
+          }
+
+          break;
+        }
+        /* no relevant status information */
+        else if( status != 0xf8 )
+        {
+          /* error */
+          retCode = I2C_CODE_ERROR;
+          break;
+        }
+      }
+
+      while(1)
+            {
+              /* get new status */
+              status = i2cCheckStatus();
+
+              /*
+               * SLA+W transmitted, ACK received or
+               * data byte transmitted, ACK received
+               */
+              if( (status == 0x18) || (status == 0x28) )
+              {
+                /* Data transmitted and ACK received */
+
+                /* write data */
+                retCode = i2cPutChar((char)*pData);
+                while(retCode == I2C_CODE_BUSY)
+                {
+                  retCode = i2cPutChar((char)*pData);
+                }
+
+                break;
+              }
+              /* no relevant status information */
+              else if( status != 0xf8 )
+              {
+                /* error */
+                retCode = I2C_CODE_ERROR;
+                break;
+              }
+            }
+  }
+
+  /* wait until data transmitted */
+  while(1)
+  {
+    /* get new status */
+    status = i2cCheckStatus();
+
+    /*
+     * SLA+W transmitted, ACK received or
+     * data byte transmitted, ACK received
+     */
+    if( (status == 0x18) || (status == 0x28) )
+    {
+      /* data transmitted and ACK received */
+      break;
+    }
+    /* no relevant status information */
+    else if(status != 0xf8 )
+    {
+      /* error */
+      retCode = I2C_CODE_ERROR;
+      break;
+    }
+  }
+
+  /* generate Stop condition */
+  i2cStop();
+
+  return retCode;
+}
+
+/******************************************************************************
+ * Description:
  *    abc
  *
  * Params:
