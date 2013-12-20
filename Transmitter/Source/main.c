@@ -26,6 +26,7 @@ void init_interrupt(void);
 void mpu6050_interrupt(void);
 extern  void __enable_interrupts(void);
 extern  void __disable_interrupts(void);
+short *calibratie (void);
 
 /******************************************************************************\
  main
@@ -44,6 +45,8 @@ extern int main(void)
 	short gy = 0;
 	short gz = 0;
 
+	short CalibratieAcc[3];
+	short *pCalibratieAcc;
 	#if USE_UART == 1
 	int sendQ[4];
 	unsigned short sendA[3];
@@ -73,12 +76,21 @@ extern int main(void)
 	delay_ms(10);
 	__enable_interrupts();
 
+	pCalibratieAcc=calibratie ();
+	CalibratieAcc[0]=*pCalibratieAcc;
+	pCalibratieAcc++;
+	CalibratieAcc[1]=*pCalibratieAcc;
+	pCalibratieAcc++;
+	CalibratieAcc[2]=*pCalibratieAcc;
+
 	///////////////////// Zend continu een pakketje ///////////////////
 	while(1)
  	{
 		if(mpu6050_getQuaternionWait(0x68, &qw, &qx, &qy, &qz)) {
 			mpu6050_getRawData(0x68, &ax, &ay, &az, &gx, &gy, &gz);
-
+			ax=ax-CalibratieAcc[0];
+			ay=ay-CalibratieAcc[1];
+			az=az-CalibratieAcc[2];
 			int i,j;
 			for(j = 0; j < 4; j++){
 				switch(j){
@@ -154,3 +166,33 @@ void mpu6050_interrupt(void)
 	mpu6050_mpuInterrupt = 0x0001;
 	EXTINT &= 0x0F;
 }
+
+short *calibratie (void)
+{
+	short ax = 0;
+	short ay = 0;
+	short az = 0;
+	short gx = 0;
+	short gy = 0;
+	short gz = 0;
+	int x=0;
+	int y=0;
+	int z=0;
+	int i=0;
+	short CalibratieAcc[3];
+	short *pCalibratieAcc;
+	pCalibratieAcc=&CalibratieAcc[0];
+
+	for(i=0;i<10;i++)
+	{
+	mpu6050_getRawData(0x68, &ax, &ay, &az, &gx, &gy, &gz);
+	x=x+ax;
+	y=y+ay;
+	z=z+az;
+	}
+	CalibratieAcc[0]=x/10;
+	CalibratieAcc[1]=y/10;
+	CalibratieAcc[2]=(z/10)-16384;
+return pCalibratieAcc;
+}
+
